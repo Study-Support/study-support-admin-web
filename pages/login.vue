@@ -77,7 +77,7 @@ onFetchResponse(() => {
   setToken(data.value.data.token.access_token);
   // setToken(data.value.token);
   console.log("Ok");
-  // $toast("Đăng nhập thành công", "success", 2000);
+  $toast('Đăng nhập thành công', 'success', 1500)
   return navigateTo('/users');
 });
 onFetchError(() => {

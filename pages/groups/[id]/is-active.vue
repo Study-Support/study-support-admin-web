@@ -56,7 +56,10 @@
               </v-row>
               <v-row class="mt-3">
                 <v-col cols="12" sm="4">
-                  <p><span>Thành viên hiện có:</span> 4 thành viên</p>
+                  <p>
+                    <span>Thành viên hiện có:</span>{{ group.quantity }} thành
+                    viên
+                  </p>
                   <div
                     v-for="(member, index) in group.membersAccepted"
                     :key="member.id"
@@ -71,6 +74,14 @@
                       </NuxtLink>
                     </p>
                   </div>
+                  <p><span>Mentor đã duyệt:</span></p>
+                  <NuxtLink
+                    :to="{ path: `/mentors/${group.mentorAccepted.id}` }"
+                    class="full"
+                  >
+                    {{ group.mentorAccepted.full_name }} _ Khoa:
+                    {{ group.mentorAccepted.faculty }}
+                  </NuxtLink>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <h5>trạng thái :</h5>
@@ -152,10 +163,22 @@ const {
   push,
   set,
   onValue,
+<<<<<<< HEAD
+  db,
+=======
+>>>>>>> develop
 } = useFirebase();
 
 const bb = () => {
   allChat.value = [];
+<<<<<<< HEAD
+  onValue(firebaseRef(databaseFirebase, `groups/1`), (data) => {
+    allChat.value = [];
+    data.forEach((d) => {
+      allChat.value.push(d.val());
+    });
+  });
+=======
   onValue(
     firebaseRef(databaseFirebase, `groups/1`),
     (data) => {
@@ -166,6 +189,7 @@ const bb = () => {
       console.log(allChat.value);
     }
   );
+>>>>>>> develop
 };
 onMounted(() => {
   bb();
@@ -184,6 +208,13 @@ const group = ref({
   self_study: "",
   time_study: "",
   quantity: "",
+  mentorAccepted: [
+    {
+      full_name: "",
+      faculty: "",
+      id: 0,
+    },
+  ],
   members: [
     {
       full_name: "",

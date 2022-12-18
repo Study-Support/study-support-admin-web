@@ -116,6 +116,10 @@
                 </td>
                 <td>{{ post.created_at.slice(0, 10) }}</td>
                 <!-- <td>{{ post.created_at.slice(0, 10) }}</td> -->
+                <td style="margin:auto">
+                  <NotificationForm :notify="post"/>
+                  <DeleteNotifyForm :notify="post" :callback="handleReload"/>
+                  <!-- <v-btn
                 <td>
                   <button
                     @click="navigateTo(`/notifications/${post.id}`)"
@@ -125,8 +129,22 @@
                       color: #fff;
                     "
                   >
-                    <v-icon>mdi-clipboard-edit-outline</v-icon>
-                  </button>                  
+                  </v-btn>
+                  <v-btn
+                    @click="navigateTo(`/notifications/${post.id}`)"
+                    style="
+                      margin-top:10px;
+                      margin-left: auto;
+                      margin-right: auto;
+                      color: red;
+                      background-color: #fff;
+                      border-radius: 50% !important;
+                    "
+                    icon="mdi-delete-outline"
+                  >
+                  </v-btn> -->
+                    <!-- <v-icon>mdi-clipboard-edit-outline</v-icon>
+                  </button>                   -->
                 </td>
               </tr>
             </tbody>
@@ -162,6 +180,7 @@ definePageMeta({
   layout: "default",
   middleware: "authenticated",
 });
+const { $toast } = useNuxtApp()
 const page = ref(1);
 const router = useRouter();
 const route = useRoute();
@@ -227,6 +246,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPost(() => {
   // myUsers.value = dataPut.value.data.data;
+  $toast('Tạo thông báo thành công', 'success', 1500);
 });
 errPost(() => {
   if (codePost.value === getConfig("constants.statusCodes.validation")) {
@@ -239,14 +259,26 @@ const submit = () => {
   post(newPost.value).json().execute();
   newPost.value.title = "";
   newPost.value.content = "";
-
   getPosts().json().execute();
+  loading.value = true;
 };
 
 const handleChangePage = () => {
   console.log(page.value);
   getPosts().json().execute();
 };
+const handleClose = () => {
+  dialog.value = false;
+  newPost.value.title = "";
+  newPost.value.content = "";
+}
+const handleReload = () =>{
+  loading.value = true;
+  getPosts().json().execute();
+  $toast('Xóa thông báo thành công', 'success', 1500);
+
+
+}
 </script>
 <style lang="scss" scoped>
 .v-card {

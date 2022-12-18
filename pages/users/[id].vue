@@ -402,7 +402,7 @@
                               <td>
                                 {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
                               </td>
-                              <td>{{ rating.rating }}/5</td>
+                              <td>{{ rating.rating }}/10</td>
                               <td>{{ rating.comment }}</td>
                               <!-- <td>{{ rating.created_at }}</td> -->
                             </tr>
