@@ -163,33 +163,16 @@ const {
   push,
   set,
   onValue,
-<<<<<<< HEAD
-  db,
-=======
->>>>>>> develop
 } = useFirebase();
 
 const bb = () => {
   allChat.value = [];
-<<<<<<< HEAD
   onValue(firebaseRef(databaseFirebase, `groups/1`), (data) => {
     allChat.value = [];
     data.forEach((d) => {
       allChat.value.push(d.val());
     });
   });
-=======
-  onValue(
-    firebaseRef(databaseFirebase, `groups/1`),
-    (data) => {
-      allChat.value = [];
-      data.forEach((d) => {
-        allChat.value.push(d.val());
-      });
-      console.log(allChat.value);
-    }
-  );
->>>>>>> develop
 };
 onMounted(() => {
   bb();

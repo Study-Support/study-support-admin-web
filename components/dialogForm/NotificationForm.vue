@@ -19,9 +19,15 @@
         tile
         v-bind="props"
         @click="dialog = true"
-        style="margin-bottom:10px;margin:auto;color:#fff;background-color: blue; border-radius: 50% !important;"
+        style="
+          margin-bottom: 10px;
+          margin: auto;
+          color: #fff;
+          background-color: blue;
+          border-radius: 50% !important;
+        "
         icon="mdi-clipboard-edit-outline"
-      >        
+      >
       </v-btn>
     </template>
     <v-card>
@@ -101,23 +107,23 @@ resPost(() => {
   // myUsers.value = dataPut.value.data.data;
 });
 errPost(() => {
-//   if (codePost.value === getConfig("constants.statusCodes.validation")) {
-//     validationErrorMessages.value = dataPost.value.meta.error_message;
-//   }
-//   return false;
+  //   if (codePost.value === getConfig("constants.statusCodes.validation")) {
+  //     validationErrorMessages.value = dataPost.value.meta.error_message;
+  //   }
+  //   return false;
 
-console.log("loi");
+  console.log("loi");
 });
 
 const submit = () => {
- console.log(props.notify.content);
+  console.log(props.notify.content);
 
   put(props.notify).json().execute();
 };
 const handleClose = () => {
   dialog.value = false;
-//   notify.value.title = "";
-//   notify.value.content = "";
+  //   notify.value.title = "";
+  //   notify.value.content = "";
 };
 </script>
 <style scoped>
