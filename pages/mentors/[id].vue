@@ -144,8 +144,7 @@
                             <label>Điểm đánh giá :</label>
                           </div>
                           <div class="col-md-7">
-                            <p>{{ myMentors.rating_score }}/10</p>
-                            <!-- slice(0, 3) -->
+                            <p>{{ myMentors.rating_score.slice(0, 3) }}/10</p>
                           </div>
                         </div>
                       </div>

@@ -60,7 +60,7 @@ const logout = () => {
         </template>
         
       </v-list>
-      <v-btn @click="logout" style="width:90%; margin:auto"  color="success"> <v-icon>mdi-logout</v-icon> Đăng xuất</v-btn>
+      <v-btn @click="logout" style="width:90%; margin:auto"  color="success"> <v-icon>mdi-logout</v-icon>LOGOUT</v-btn>
       <!-- <div class="pa-4 ma-4 bg-light-primary rounded-lg text-center">
         <img src="/images/sidebar-buynow-bg.svg" />
         <h4 class="font-weight-regular mb-3">Study for love</h4>

@@ -156,7 +156,7 @@ getFilterMentorsResponse(() => {
     dataGetFilterMentors.value.data.data.length <
     getConfig("constants.pagination")
   ) {
-    loading.value = false;
+    loading1.value = false;
   }
   // myMentors.value = dataGetMentors.value.data.data;
 });

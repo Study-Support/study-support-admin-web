@@ -132,8 +132,9 @@ const myUsers = ref([]);
 const filter = ref({
   a: {
     search: route.query.search === undefined ? "" : route.query.search,
-    faculty: route.query.faculty_id === undefined ? "" : route.query.faculty_id,
-    // type: route.query.type === undefined ? "" : route.query.type,
+    faculty: route.query.faculty === undefined ? "" : route.query.faculty,
+    type: route.query.type === undefined ? "" : route.query.type,
+    page: route.query.page === undefined ? 1 : route.query.page,
   },
 });
 
@@ -215,6 +216,7 @@ body {
 }
 .col-cus {
   background-color: #d5e7f2;
+  padding: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin-bottom: 20px;
   border-radius: 10px;

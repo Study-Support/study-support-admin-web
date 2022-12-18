@@ -4,17 +4,18 @@
       <v-col cols="12" sm="12" align-item="center" class="col-cus">
         <v-row>
           <v-col cols="12" sm="6" md="6" lg="3">
+            <lable>Tìm kiếm thông báo: </lable>
             <div class="input-group search" id="search">
               <input
                 v-model="filter.a.search"
                 class="form-control border input-cus"
                 type="search"
-                placeholder="Thông báo:"
+                placeholder="Search"
               />
             </div>
           </v-col>
           <v-col cols="12" sm="6" md="6" lg="3">
-            <v-btn @click.prevent="search" width="100%" class="btn-cus1">
+            <v-btn @click.prevent="search" width="100%" class="mt-4 btn-cus1">
               <v-icon>mdi-magnify</v-icon>
               Search
             </v-btn>
@@ -22,24 +23,12 @@
           <v-col cols="12" sm="6" md="6" lg="3"></v-col>
           <v-col cols="12" sm="6" md="6" lg="3">
             <v-dialog v-model="dialog" persistent>
-              <v-btn icon="mdi-close-thick" 
-              @click="handleClose"
-              style="
-                position:absolute;
-                right: 10px;
-                top:10px;
-                z-index: 10;
-                background-color: blue;
-                color:#fff;
-                box-shadow: none;
-                border-radius: 50% !important;                
-              "></v-btn>
               <template v-slot:activator="{ props }">
                 <v-btn
                   tile
                   v-bind="props"
                   @click="dialog = true"
-                  class="btn-cus1"
+                  class="mt-4 btn-cus1"
                   style="float: right"
                 >
                   <v-icon left> mdi-pencil </v-icon>
@@ -61,35 +50,33 @@
                 <form @submit.prevent="submit">
                   <div style="text-align: center; padding: 16px">
                     <v-text-field
-                      label="Tiêu đề"
-                      variant="underlined"
+                      label="Title"
                       background-color="light-blue"
                       prepend-icon="mdi-account"
                       v-model="newPost.title"
                     ></v-text-field>
                     <v-textarea
                       color="black"
-                      label="Thông báo"
-                      variant="underlined"
+                      label="Label"
                       prepend-icon="mdi-comment"
                       v-model="newPost.content"
                     ></v-textarea>
                     <div class="d-flex flex-wrap gap-2 flex-row-reverse"></div>
                   </div>
-                  <v-card-actions>
+                  <v-card-actions style="background-color: #ddd">
                     <v-spacer></v-spacer>
                     <v-btn
                       color="black"
                       text
-                      @click="handleClose"
+                      @click="dialog = false"
                       variant="outlined"
-                      style="background-color: #fff;border:1px solid blue;"                 
+                      style="background-color: #fff"
                     >
                       Đóng
                     </v-btn>
                     <v-btn
                       text
-                      @click="dialog=false"
+                      @click="dialog = false"
                       type="submit"
                       variant="flat"
                       color="secondary"
@@ -110,9 +97,9 @@
               <tr>
                 <!-- <th><input type="checkbox" v-model="checkAll" data-check-all/></th> -->
                 <th>No.</th>
-                <th>Thông báo</th>
-                <th>Thời gian</th>
-                <th>Tùy chọn</th>
+                <th>Content</th>
+                <th>Time</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -120,9 +107,9 @@
                 <!-- <td><input type="checkbox" data-check-all-item/></td> -->
                 <td>{{ index + 1 }}</td>
                 <td class="td-cus">
-                  <h4>
+                  <h3>
                     {{ post.title }}
-                  </h4>
+                  </h3>
                   <p>
                     {{ post.content }}
                   </p>
@@ -130,55 +117,33 @@
                 <td>{{ post.created_at.slice(0, 10) }}</td>
                 <!-- <td>{{ post.created_at.slice(0, 10) }}</td> -->
                 <td>
-                  <NotificationForm :notify="post"/>
-                  <DeleteNotifyForm :notify="post"/>
-                  <v-btn
+                  <button
                     @click="navigateTo(`/notifications/${post.id}`)"
                     style="
-                      margin-left: auto;
-                      margin-right: auto;
-                      color: #05b187;
-                      background-color: #fff;
-                      border-radius: 50% !important;
+                      margin-left: 10px;
+                      background-color: #05b187;
+                      color: #fff;
                     "
-                    icon="mdi-clipboard-edit-outline"
                   >
-                  </v-btn>
-                  <v-btn
-                    @click="navigateTo(`/notifications/${post.id}`)"
-                    style="
-                      margin-top:10px;
-                      margin-left: auto;
-                      margin-right: auto;
-                      color: red;
-                      background-color: #fff;
-                      border-radius: 50% !important;
-                    "
-                    icon="mdi-delete-outline"
-                  >
-                  </v-btn>
+                    <v-icon>mdi-clipboard-edit-outline</v-icon>
+                  </button>                  
                 </td>
               </tr>
             </tbody>
+            
           </table>
           <v-progress-circular
-            indeterminate
-            color="primary"
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              margin: auto;
-            "
-            v-if="loading"
-          ></v-progress-circular>
+              indeterminate
+              color="primary"
+              style="display: flex;justify-content: center;align-items: center;margin:auto"
+              v-if="loading"
+            ></v-progress-circular>
 
           <v-pagination
             v-model="page"
             :length="pagination.total_page"
             color="purple"
             @click="handleChangePage"
-            rounded="circle"
           ></v-pagination>
         </div>
       </v-row>
@@ -193,14 +158,10 @@
 </template>
 
 <script setup>
-import NotificationForm from "../../components/dialogForm/NotificationForm.vue";
-import DeleteNotifyForm from "../../components/dialogForm/DeleteNotifyForm.vue";
-
 definePageMeta({
   layout: "default",
   middleware: "authenticated",
 });
-
 const page = ref(1);
 const router = useRouter();
 const route = useRoute();
@@ -268,15 +229,13 @@ resPost(() => {
   // myUsers.value = dataPut.value.data.data;
 });
 errPost(() => {
-  // if (codePost.value === getConfig("constants.statusCodes.validation")) {
-  //   validationErrorMessages.value = dataPost.value.meta.error_message;
-  // }
-  // return false;
-  console.log("Loi")
+  if (codePost.value === getConfig("constants.statusCodes.validation")) {
+    validationErrorMessages.value = dataPost.value.meta.error_message;
+  }
+  return false;
 });
 
 const submit = () => {
-  console.log(newPost.value.title);
   post(newPost.value).json().execute();
   newPost.value.title = "";
   newPost.value.content = "";
@@ -288,11 +247,6 @@ const handleChangePage = () => {
   console.log(page.value);
   getPosts().json().execute();
 };
-const handleClose = () => {
-  dialog.value = false;
-  newPost.value.title = "";
-  newPost.value.content = "";
-}
 </script>
 <style lang="scss" scoped>
 .v-card {
@@ -336,11 +290,10 @@ table {
   color: #e6e7e8;
   font-size: 15px;
 }
-tr {
-  border-bottom: 1px solid #ccc;
-}
+
 th,
 td {
+  border-bottom: 1px solid #dddddd;
   padding: 10px 20px;
   font-size: 14px;
   text-align: center;
@@ -349,7 +302,7 @@ td {
 .td-cus {
   text-align: left;
 }
-.td-cus h4 {
+.td-cus h3 {
   color: blue;
 }
 .input-cus {
@@ -407,7 +360,10 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
 }
-
+td,
+th {
+  border: 1px solid #dbdada;
+}
 th {
   text-align: center;
   color: white;
@@ -424,6 +380,7 @@ td:nth-child(1) {
   border-radius: 10px;
 }
 .v-dialog .v-overlay__content > .v-card {
-  border-radius: 10px;
+  border-radius: 20px;
 }
+
 </style>

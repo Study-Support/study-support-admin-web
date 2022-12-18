@@ -103,7 +103,7 @@
                     </p>
                   </td>                  
                   <td style="display: flex;justify-content: center;">                    
-                    <QuestionForm :question="question"/> 
+                    <DiaLogForm :question="question"/> 
                   </td>
                 </tr>
               </tbody>
@@ -135,7 +135,7 @@
   </template>
   
   <script setup>
-import QuestionForm from "../../components/dialogForm/QuestionForm.vue";
+import DiaLogForm from "../../components/dialogForm/DiaLogForm.vue";
 
   definePageMeta({
     layout: "default",
@@ -198,24 +198,27 @@ import QuestionForm from "../../components/dialogForm/QuestionForm.vue";
     onFetchResponse: resQuestion,
     onFetchError: errQuestion,
     statusCode: codeQuestion,
-    post,
+    put,
   } = useFetchApi({
     requireAuth: true,
     disableHandleErrorUnauthorized: true,
   })("/mentor-questions", { immediate: false });
-  // Trả về khi post thông tin cá nhân
+  // Trả về khi put thông tin cá nhân
   resQuestion(() => {
-    // myUsers.value = datapost.value.data.data;
+    // myUsers.value = dataPut.value.data.data;
   });
   errQuestion(() => {
-    console.log("Loi roi")
+    if (codeQuestion.value === getConfig("constants.statusCodes.validation")) {
+      validationErrorMessages.value = dataQuestion.value.meta.error_message;
+    }
+    return false;
   });
   
   const submit = () => {
-    post(newQuestion.value).json().execute();
+    put(newQuestion.value).json().execute();
     newQuestion.value.title='';
     newQuestion.value.content='';
-    loading.value = true;
+  
     getQuestions().json().execute();
   };
   

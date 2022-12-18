@@ -152,7 +152,6 @@ const {
   push,
   set,
   onValue,
-  db
 } = useFirebase();
 
 const bb = () => {
@@ -164,9 +163,9 @@ const bb = () => {
       data.forEach((d) => {
         allChat.value.push(d.val());
       });
+      console.log(allChat.value);
     }
-  );  
-  console.log(productsSnap);
+  );
 };
 onMounted(() => {
   bb();

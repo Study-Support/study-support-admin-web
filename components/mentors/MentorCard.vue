@@ -9,8 +9,7 @@
         </div>
         <span class="desc">Khoa:{{ mentor.faculty }}</span>
         <div class="share">
-          <span>{{ mentor.rating_score }}/10</span>
-          <!-- .slice(0, 3) -->
+          <span>{{ mentor.rating_score.slice(0, 3) }}/10</span>
         </div>
       </div>
     </div>
