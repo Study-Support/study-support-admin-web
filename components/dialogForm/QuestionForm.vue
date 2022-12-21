@@ -1,15 +1,28 @@
 <template>
   <v-dialog v-model="dialog" persistent>
+    <v-btn
+      icon="mdi-close-thick"
+      @click="dialog = false"
+      style="
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 10;
+        background-color: blue;
+        color: #fff;
+        box-shadow: none;
+        border-radius: 50% !important;
+      "
+    ></v-btn>
     <template v-slot:activator="{ props }">
       <v-btn
         tile
         v-bind="props"
         @click="dialog = true"
-        style="float: right"
+        style="float: right; border-radius: 50% !important"
         color="success"
+        icon="mdi-pencil"
       >
-        <v-icon left> mdi-pencil </v-icon>
-        Edit
       </v-btn>
     </template>
     <v-card>
@@ -38,15 +51,6 @@
         <v-card-actions style="background-color: #ddd">
           <v-spacer></v-spacer>
           <v-btn
-            text
-            @click="dialog = false"
-            type="submit"
-            variant="flat"
-            color="error"
-          >
-          <v-icon>mdi-trash-can-outline</v-icon>Xoá
-          </v-btn>
-          <v-btn
             color="black"
             text
             @click="dialog = false"
@@ -64,7 +68,6 @@
           >
             Lưu
           </v-btn>
-         
         </v-card-actions>
       </form>
     </v-card>
@@ -77,9 +80,37 @@ const props = defineProps({
   },
 });
 const dialog = ref(false);
+const {
+  data: dataQuestions,
+  onFetchResponse: resQuestions,
+  onFetchError: errQuestions,
+  statusCode: codeQuestions,
+  put,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(`/mentor-questions/${props.question.id}`, { immediate: false });
+// })(`/notifications/`, { immediate: false });
+resQuestions(() => {
+  // myUsers.value = dataPut.value.data.data;
+});
+errQuestions(() => {
+  //   if (codeQuestions.value === getConfig("constants.statusCodes.validation")) {
+  //     validationErrorMessages.value = dataQuestions.value.meta.error_message;
+  //   }
+  //   return false;
+
+  console.log("loi");
+});
+
+const submit = () => {
+  console.log(props.question.content);
+
+  put(props.question).json().execute();
+};
 </script>
 <style scoped>
 .v-card {
-    width: 80vw;
-  }
+  width: 80vw;
+}
 </style>

@@ -92,7 +92,6 @@
                   </tr>
                 </tbody>
               </table>
-              <v-row> </v-row>
               <v-progress-circular
                 indeterminate
                 color="primary"
@@ -105,11 +104,11 @@
                 v-if="loading"
               ></v-progress-circular>
               <v-pagination
-                v-model="page"
-                :length="totalPages"
-                total-visible="1"
-                color="purple"
-              ></v-pagination>
+                  v-model="page"
+                  :length="pagination.total_page"
+                  color="purple"
+                  @click="handleChangePage"
+                ></v-pagination>
             </div>
           </v-row>
         </v-col>
@@ -124,6 +123,12 @@ definePageMeta({
 });
 
 const route = useRoute();
+const page = ref(1);
+const pagination = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
 const router = useRouter();
 const { getConfig } = useConfig();
 const faculties = ref({});
@@ -134,14 +139,17 @@ const filter = ref({
     search: route.query.search === undefined ? "" : route.query.search,
     faculty: route.query.faculty === undefined ? "" : route.query.faculty,
     type: route.query.type === undefined ? "" : route.query.type,
-    page: route.query.page === undefined ? 1 : route.query.page,
   },
 });
-
+const handleChangePage = () => {
+  loading.value = true;
+  getFilterUsers().json().execute();
+};
 const { url: urlUser } = useUrl({
   path: "/users",
   queryParams: {
-    // queryParams: filter.value.a,
+    queryParams: filter.value.a,
+    page: page,
   },
 });
 
@@ -158,18 +166,10 @@ const {
 getFilterUsers().json().execute();
 
 getFilterUsersResponse(() => {
-  console.log(dataGetFilterUsers.value.data.data);
+    myUsers.value = dataGetFilterUsers.value.data.data;
+    pagination.value = dataGetFilterUsers.value.data.pagination;
 
-  if (dataGetFilterUsers.value.data.data.length !== 0) {
-    myUsers.value = myUsers.value.concat(dataGetFilterUsers.value.data.data);
-    console.log(myUsers.value);
-  }
-  if (
-    dataGetFilterUsers.value.data.data.length <
-    getConfig("constants.pagination")
-  ) {
-    loading.value = false;
-  }
+  loading.value = false;
   // myUsers.value = dataGetUsers.value.data.data;
   console.log(myUsers.value);
 });

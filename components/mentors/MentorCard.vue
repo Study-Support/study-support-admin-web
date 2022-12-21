@@ -9,7 +9,8 @@
         </div>
         <span class="desc">Khoa:{{ mentor.faculty }}</span>
         <div class="share">
-          <span>{{ mentor.rating_score.slice(0, 3) }}/10</span>
+          <span>{{ mentor.rating_score }}/10</span>
+          <!-- <span>{{ mentor.rating_score.slice(0, 3) }}/10</span> -->
         </div>
       </div>
     </div>
@@ -34,7 +35,7 @@ const props = defineProps({
   text-decoration: none;
 }
 .box {
-  height: 375px;
+  height: 360px;
   width: 100%;
   border: 8px solid #fff;
   box-shadow: 0 3px 5px #000;
