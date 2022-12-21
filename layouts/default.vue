@@ -19,9 +19,6 @@ onMounted(() => {
 <template>
   <div>
     <v-app>
-      <!-- ---------------------------------------------- -->
-      <!---Header -->
-      <!-- ---------------------------------------------- -->
       <v-app-bar elevation="0" color="primary">
         <div class="pe-5">
           <NuxtLink to="/" class="d-flex text-decoration-none">
