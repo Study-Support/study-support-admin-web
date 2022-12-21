@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useDisplay } from "vuetify";
 import Sidebar from "~~/components/layoutComponents/sidebar/Sidebar.vue";
-import Header from "~~/components/layoutComponents/header/Header.vue";
+import Header from "~~/components/layoutComponents/header/header.vue";
 import "@fontsource/love-ya-like-a-sister";
 useMeta({
   title: "Study Support",
