@@ -12,219 +12,14 @@
       v-if="loading"
     ></v-progress-circular>
     <div v-else>
-      <div class="container emp-profile">
-        <div class="user-infor">
-          <v-row>
-            <v-col sm="12" md="12" lg="4">
-              <div class="file">
-                <div class="avatar">
-                  <img cover src="/images/user.png" alt="" />
-                  <div>
-                    <v-icon>mdi-image-multiple </v-icon>
-                    <!-- <input type="file" name="file" /> -->
-                  </div>
-                </div>
-              </div>
-            </v-col>
-            <v-col sm="12" md="12" lg="8">
-              <div class="profile-head">
-                <h3>{{ myUsers.full_name }}</h3>
-                <p class="proile-status">
-                  Status :
-                  <span>{{
-                    myUsers.is_active == 0 ? "Đang khóa" : "Đang hoạt động"
-                  }}</span>
-                </p>
-              </div>
-              <div class="control-btn">
-                <v-dialog v-model="dialog" persistent max-width="600px">
-                  <template v-slot:activator="{ props }">
-                    <v-btn
-                      color="secondary"
-                      dark
-                      v-bind="props"
-                      @click="dialog = true"
-                      variant="flat"
-                    >
-                      <v-icon style="font-size: 18px">mdi-account-edit</v-icon>
-                      <span>Chỉnh sửa thông tin</span>
-                    </v-btn>
-                  </template>
-                  <v-card class="card-cus">
-                    <v-card-title
-                      color="secondary"
-                      style="
-                        text-align: center;
-                        padding: 16px 0;
-                        background-color: blue;
-                        color: #fff;
-                      "
-                    >
-                      <span class="text-h3">Cập nhật thông tin sinh viên</span>
-                    </v-card-title>
-                    <form @submit.prevent="submit">
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                label="Full name*"
-                                required
-                                v-model="myUsers.full_name"
-                              ></v-text-field>
-                            </v-col>
-
-                            <v-col cols="12">
-                              <v-text-field
-                                label="Email*"
-                                required
-                                v-model="myUsers.email"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                              <v-text-field
-                                label="Phone number*"
-                                required
-                                type="number"
-                                v-model="myUsers.phone_number"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                              <v-text-field
-                                label="Address*"
-                                required
-                                type="text"
-                                v-model="myUsers.address"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                              <v-text-field
-                                label="is_active*"
-                                required
-                                type="text"
-                                v-model="myUsers.is_active"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                              <!-- <Datepicker v-model="myUsers.birthday" /> -->
-                              <input type="date" v-model="myUsers.birthday" />
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                              <v-select
-                                :items="['male', 'female']"
-                                label="Gender*"
-                                required
-                                v-model="myUsers.gender"
-                              ></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                              <select
-                                id="faculty"
-                                v-model="myUsers.faculty"
-                                class="form-select select-cus"
-                                required
-                              >
-                                <option
-                                  v-for="faculty in faculties"
-                                  :key="faculty.id"
-                                  :value="myUsers.faculty"
-                                >
-                                  {{ faculty.name }}
-                                </option>
-                              </select>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                        <small>* Các trường bắt buộc nhập thông tin</small>
-                      </v-card-text>
-                      <v-card-actions style="background-color: #ddd">
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          color="black"
-                          text
-                          @click="dialog = false"
-                          variant="outlined"
-                        >
-                          Đóng
-                        </v-btn>
-                        <v-btn
-                          text
-                          @click="submit, (dialog = false)"
-                          type="submit"
-                          variant="flat"
-                          color="secondary"
-                        >
-                          Lưu
-                        </v-btn>
-                      </v-card-actions>
-                    </form>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialog1" persistent>
-                  <template v-slot:activator="{ props }">
-                    <v-btn
-                      dark
-                      v-bind="props"
-                      @click="dialog1 = true"
-                      variant="flat"
-                      color="error"
-                    >
-                      <v-icon>mdi-lock</v-icon>
-                      Khóa tài khoản
-                    </v-btn>
-                  </template>
-                  <v-card style="width: 50%; margin: auto">
-                    <v-card-title
-                      style="
-                        text-align: center;
-                        padding: 16px 0;
-                        background-color: red;
-                        color: #fff;
-                      "
-                      class="text-h5"
-                    >
-                      Khoá Tài Khoản
-                    </v-card-title>
-                    <v-card-text style="display: flex; align-item: center">
-                      <v-icon
-                        style="font-size: 60px; color: red; margin-right: 10px"
-                        >mdi-account-lock</v-icon
-                      >
-                      <span
-                        >Tài khoản sau khi khóa sẽ không thể sử dụng các chức
-                        năng của ứng dụng cho đến khi được mở lại.</span
-                      ></v-card-text
-                    >
-                    <v-card-actions style="background-color: #ddd">
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="secondary"
-                        variant="flat"
-                        @click="dialog1 = false"
-                      >
-                        Hủy
-                      </v-btn>
-                      <v-btn
-                        color="error"
-                        variant="flat"
-                        @click="dialog1 = false"
-                      >
-                        Đồng ý
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </div>
-            </v-col>
-          </v-row>
-        </div>
-      </div>
+      <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Quản lý sinh viên /</span> Tài khoản
+      </h4>
       <div class="profile-user">
         <div class="col-md-12 col-cus">
           <v-card>
-            <v-toolbar class="toolbar-cus">
-              <v-toolbar-title class="pl-3 pt-3 pb-3">
-                <h5>Quản lý thông tin sinh viên :</h5>
+            <v-toolbar>
+              <v-toolbar-title class="pl-3 pb-3">
                 <v-tabs v-model="tab" color="primary">
                   <v-tab value="option-1" class="option-btn">
                     <v-icon start> mdi-account </v-icon>
@@ -245,80 +40,302 @@
               <v-window v-model="tab">
                 <v-window-item value="option-1">
                   <v-card flat>
-                    <div class="profile-tab pl-5 pt-3">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>Name</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.full_name }}</p>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="card mb-4">
+                          <h5 class="card-header">Profile Details</h5>
+                          <!-- Account -->
+                          <div class="card-body">
+                            <div
+                              class="d-flex align-items-start align-items-sm-center gap-4"
+                            >
+                              <img
+                                src="/images/user.png"
+                                alt="user-avatar"
+                                class="d-block rounded"
+                                height="100"
+                                width="100"
+                                id="uploadedAvatar"
+                              />
+                              <div class="button-wrapper">
+                                <EditUserForm
+                                  :user="myUsers"
+                                  :faculties="faculties"
+                                />
+                                <LockUserForm :user="myUsers" :callback="handlePut"/>
+                                <!-- <v-dialog
+                                  v-model="dialog1"
+                                  persistent
+                                  v-if="myUsers.is_active == 1"
+                                >
+                                  <template v-slot:activator="{ props }">
+                                    <v-btn
+                                      dark
+                                      v-bind="props"
+                                      @click="dialog1 = true"
+                                      variant="flat"
+                                      color="error"
+                                      style="width: 180px; margin-top: 4px"
+                                    >
+                                      <v-icon>mdi-lock</v-icon>
+                                      Khóa tài khoản
+                                    </v-btn>
+                                  </template>
+                                  <v-card style="margin: auto">
+                                    <v-card-title
+                                      style="
+                                        text-align: center;
+                                        padding: 16px 0;
+                                        background-color: red;
+                                        color: #fff;
+                                      "
+                                      class="text-h5"
+                                    >
+                                      Khoá Tài Khoản
+                                    </v-card-title>
+                                    <v-card-text
+                                      style="display: flex; align-item: center"
+                                    >
+                                      <v-icon
+                                        style="
+                                          font-size: 60px;
+                                          color: red;
+                                          margin-right: 10px;
+                                        "
+                                        >mdi-account-lock</v-icon
+                                      >
+                                      <span
+                                        >Tài khoản sau khi khóa sẽ không thể sử
+                                        dụng các chức năng của ứng dụng cho đến
+                                        khi được mở lại.<br />
+                                        Bạn có chắc chắn muốn khóa tài khoản này
+                                        không ?</span
+                                      ></v-card-text
+                                    >
+                                    <v-card-actions
+                                      style="background-color: #ddd"
+                                    >
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        color="secondary"
+                                        variant="flat"
+                                        @click="dialog1 = false"
+                                      >
+                                        Hủy
+                                      </v-btn>
+                                      <v-btn
+                                        color="error"
+                                        variant="flat"
+                                        @click="handleLockAccount"
+                                      >
+                                        Đồng ý
+                                      </v-btn>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-dialog>
+                                <v-dialog
+                                  v-model="dialog1"
+                                  persistent
+                                  v-if="myUsers.is_active == 0"
+                                >
+                                  <template v-slot:activator="{ props }">
+                                    <v-btn
+                                      dark
+                                      v-bind="props"
+                                      @click="dialog1 = true"
+                                      variant="flat"
+                                      color="primary"
+                                      style="width: 180px; margin-top: 4px"
+                                    >
+                                      <v-icon>mdi-lock</v-icon>
+                                      Mở tài khoản
+                                    </v-btn>
+                                  </template>
+                                  <v-card style="margin: auto">
+                                    <v-card-title
+                                      style="
+                                        text-align: center;
+                                        padding: 16px 0;
+                                        background-color: #1e88e5;
+                                        color: #fff;
+                                      "
+                                      class="text-h5"
+                                    >
+                                      Mở tài khoản
+                                    </v-card-title>
+                                    <v-card-text
+                                      style="display: flex; align-item: center"
+                                    >
+                                      <v-icon
+                                        style="
+                                          font-size: 60px;
+                                          color: #1e88e5;
+                                          margin-right: 10px;
+                                        "
+                                        >mdi-account-lock</v-icon
+                                      >
+                                      <span
+                                        >Tài khoản sau khi khóa sẽ không thể sử
+                                        dụng các chức năng của ứng dụng cho đến
+                                        khi được mở lại. <br />
+                                        Bạn có chắc chắn muốn mở lại tài khoản
+                                        này không ?</span
+                                      ></v-card-text
+                                    >
+                                    <v-card-actions
+                                      style="background-color: #ddd"
+                                    >
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        color="secondary"
+                                        variant="flat"
+                                        @click="dialog1 = false"
+                                      >
+                                        Hủy
+                                      </v-btn>
+                                      <v-btn
+                                        color="error"
+                                        variant="flat"
+                                        @click="handleLockAccount"
+                                      >
+                                        Đồng ý
+                                      </v-btn>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-dialog> -->
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>Email</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.email }}</p>
-                            </div>
+                          <hr class="my-0" />
+                          <div class="card-body">
+                            <form
+                              id="formAccountSettings"
+                              method="POST"
+                              onsubmit="return false"
+                            >
+                              <div class="row">
+                                <div class="mb-3 col-md-12">
+                                  <label for="firstName" class="form-label"
+                                    >Họ và tên</label
+                                  >
+                                  <input
+                                    class="form-control"
+                                    type="text"
+                                    id="firstName"
+                                    name="firstName"
+                                    v-model="myUsers.full_name"
+                                    autofocus=""
+                                    disabled
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                  <label for="firstName" class="form-label"
+                                    >Trạng thái</label
+                                  >
+                                  <select
+                                    id="country"
+                                    class="select2 form-select"
+                                    disabled
+                                  >
+                                    <option value="1">
+                                      {{
+                                        myUsers.is_active == 0
+                                          ? "Đã khóa"
+                                          : "Đang hoạt động"
+                                      }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                  <label for="email" class="form-label"
+                                    >E-mail</label
+                                  >
+                                  <input
+                                    class="form-control"
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    v-model="myUsers.email"
+                                    placeholder="john.doe@example.com"
+                                    disabled
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                  <label class="form-label" for="phoneNumber"
+                                    >Phone Number</label
+                                  >
+                                  <div class="input-group input-group-merge">
+                                    <span class="input-group-text"
+                                      >VI (+84)</span
+                                    >
+                                    <input
+                                      type="text"
+                                      id="phoneNumber"
+                                      name="phoneNumber"
+                                      class="form-control"
+                                      v-model="myUsers.phone_number"
+                                      disabled
+                                    />
+                                  </div>
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                  <label for="address" class="form-label"
+                                    >Address</label
+                                  >
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="address"
+                                    name="address"
+                                    v-model="myUsers.address"
+                                    disabled
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                  <label for="address" class="form-label"
+                                    >Sinh Nhật</label
+                                  >
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="address"
+                                    name="address"
+                                    v-model="myUsers.birthday"
+                                    disabled
+                                  />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                  <label class="form-label" for="country"
+                                    >Giới tính</label
+                                  >
+                                  <select
+                                    id="country"
+                                    class="select2 form-select"
+                                    disabled
+                                  >
+                                    <option value="1">
+                                      {{ myUsers.gender == 0 ? "Nữ" : "Nam" }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                  <label for="language" class="form-label"
+                                    >Khoa</label
+                                  >
+                                  <select
+                                    id="language"
+                                    class="select2 form-select"
+                                    disabled
+                                  >
+                                    <option value="">
+                                      {{ myUsers.faculty }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                            </form>
                           </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>Phone</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.phone_number }}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>Address</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.address }}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>Gender</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.gender == 1 ? "Nam" : "Nữ" }}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>BirthDay</label>
-                            </div>
-                            <div class="col-md-9">
-                              <p>{{ myUsers.birthday }}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-6">
-                          <label>Faculty</label>
-                        </div>
-                        <div class="col-md-6">
-                          <p>{{ myUsers.faculty }}</p>
+                          <!-- /Account -->
                         </div>
                       </div>
                     </div>
@@ -349,7 +366,13 @@
                             <tr
                               v-for="(group, index) in groupsUser"
                               :key="index"
-                              @click="navigateTo(`/groups/${group.id}/${messages1[group.status]}`)"
+                              @click="
+                                navigateTo(
+                                  `/groups/${group.id}/${
+                                    messages1[group.status]
+                                  }`
+                                )
+                              "
                             >
                               <td>{{ group.id }}</td>
 
@@ -357,7 +380,13 @@
                                 {{ group.subject }}
                               </td>
                               <td>{{ group.faculty }}</td>
-                              <td>{{ group.self_study == 1 ? "Nhóm tự học" : "Nhóm tìm mentor" }}</td>
+                              <td>
+                                {{
+                                  group.self_study == 1
+                                    ? "Nhóm tự học"
+                                    : "Nhóm tìm mentor"
+                                }}
+                              </td>
                               <td>
                                 {{ group.topic }}
                               </td>
@@ -427,14 +456,13 @@
   </div>
 </template>
 <script setup>
-const v = new Date();
-const dialog = ref(false);
+import EditUserForm from "../../components/dialogForm/EditUserForm.vue";
+import LockUserForm from "../../components/dialogForm/LockUserForm.vue";
+const { $toast } = useNuxtApp();
 const dialog1 = ref(false);
 const groupsUser = ref([]);
 const ratings = ref([]);
 const tab = ref("option-1");
-const tab1 = ref("option-1");
-const tab2 = ref("option-1");
 const loading = ref(true);
 const route = useRoute();
 const faculties = ref({});
@@ -452,19 +480,19 @@ const myUsers = ref({
   is_active: 0,
 });
 const messages = {
-  '0': 'Đang chờ duyệt',
-  '1':'tìm kiếm bạn học',
-  '2': 'tìm kiếm mentor',
-  '3': 'đang hoạt động',
-  '4': 'đã đóng',
-}
+  0: "Đang chờ duyệt",
+  1: "tìm kiếm bạn học",
+  2: "tìm kiếm mentor",
+  3: "đang hoạt động",
+  4: "đã đóng",
+};
 var messages1 = {
-  '0':'create',
-  '1':'recruit-member',
-  '2': 'recruit-mentor',
-  '3': 'is-active',
-  '4': 'is-close'
-}
+  0: "create",
+  1: "recruit-member",
+  2: "recruit-mentor",
+  3: "is-active",
+  4: "is-close",
+};
 const { url: url2 } = useUrl({
   path: `/users/${route.params.id}`,
   queryParams: {
@@ -514,67 +542,31 @@ const {
 })(`/users/${route.params.id}`, { immediate: false });
 // Trả về khi put thông tin cá nhân
 resPut(() => {
-  console.log("put thanh cong");
+  $toast("Cập nhật thông tin thành công", "success", 1500);
+  loading.value = false;
 });
 errPut(() => {
-  // if (codePut.value === getConfig("constants.statusCodes.validation")) {
-  //   validationErrorMessages.value = dataPut.value.meta.error_message;
-  // }
-  // return false;
-  console.log("Loi put");
+  $toast("Hệ thống gặp sự cố, bạn vui lòng thử lại sau", "error", 1500);
+  loading.value = false;
 });
-const submit = () => {
-  console.log(myUsers.value);
+const handlePut =() =>{
   put(myUsers.value).json().execute();
+}
+const handleLockAccount = () => {
+  loading.value = true;
+  if (myUsers.value.is_active == 1) {
+    myUsers.value.is_active = 0;
+    put(myUsers.value).json().execute();
+  } else {
+    myUsers.value.is_active = 1;
+    put(myUsers.value).json().execute();
+  }
+  dialog1.value = false;
 };
-
-// Tạo url lấy groups user đang tham gia học
-// const { url: urlgroupUser } = useUrl({
-//   path: "users/groups",
-//   queryParams: {
-
-//   },
-// });
-
-// Lấy groups của user đang đăng nhập
-// const {
-//   data: dataGetgroupsUser,
-//   get: getgroupsUser,
-//   onFetchResponse: getgroupsUserResponse,
-//   onFetchError: getgroupsUserError,
-// } = useFetchApi({
-//   requireAuth: true,
-//   disableHandleErrorUnauthorized: true,
-// })(urlgroupUser, { immediate: false });
-// getgroupsUser().json().execute();
-// getgroupsUserResponse(() => {
-//   groupsUser.value = dataGetgroupsUser.value.data.data;
-//   console.log(dataGetgroupsUser.value.data.data);
-// });
 </script>
 <style scoped>
 .wrap {
-  min-height: 150vh;
   font-family: "Roboto Slab", "Times New Roman", serif !important;
-}
-.emp-profile {
-  border-radius: 0.5rem;
-  background: #b3b5f2;
-  max-width: 1318px;
-  border: 1px solid #ddd;
-}
-.emp-profile h3 {
-  font-family: "Roboto Slab", "Times New Roman", serif;
-  color: #a652;
-}
-.user-infor {
-  background-color: #fff;
-  width: 70%;
-  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.12),
-    0 7px 10px -5px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  margin: 20px auto;
-  padding: 20px;
 }
 .profile-user {
   margin: 20px auto;
@@ -593,40 +585,6 @@ const submit = () => {
   min-width: 180px;
   margin-right: 10px;
 }
-.file {
-  z-index: -1000;
-}
-.avatar {
-  width: 180px;
-  height: 180px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 100px;
-  overflow: hidden;
-  position: relative;
-}
-.avatar > div {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(200, 200, 200, 0.477);
-  width: 100%;
-  height: 100%;
-}
-.avatar:hover div {
-  display: inline-block;
-}
-.avatar img {
-  width: 100%;
-  border-radius: 50%;
-}
-.avatar input {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-}
 .card-cus {
   min-width: 80vw;
   min-height: 90vh;
@@ -640,17 +598,10 @@ const submit = () => {
   font-family: "Roboto Slab", "Times New Roman", serif;
 }
 .v-tabs .v-btn {
-  /* background-color: #6c7ee1; */
-  /* color: #fff; */
   text-align: center;
 }
 .v-toolbar {
-  padding-top: 20px;
-  height: 100px;
   background-color: #fff;
-}
-.v-slide-group-item--active {
-  /* color: #ffc4a4 !important; */
 }
 .col-md-6 {
   padding: 10px;
@@ -658,7 +609,7 @@ const submit = () => {
 .bor-col {
   border-right: 3px solid #0062cc;
 }
-.proile-rating span {
+.profile-rating span {
   color: #495057;
   font-size: 15px;
   font-weight: 600;
@@ -809,6 +760,9 @@ input[type="date"] {
   background: #ee2c74;
   margin-top: 5px;
 }
+.h3-cus {
+  padding-top: 0 !important;
+}
 .h3-cus:after {
   content: "";
   display: block;
@@ -917,5 +871,12 @@ td button {
 }
 td button:hover {
   opacity: 0.8;
+}
+.form-select .form-control {
+  background-color: rgb(161, 161, 161) !important;
+}
+.card-header {
+  background-color: #fff !important;
+  border-top: none !important;
 }
 </style>

@@ -21,7 +21,14 @@
         @click="dialog1 = true"
         variant="flat"
         color="error"
-        style="margin-left:auto;margin-right:auto;margin-top:10px;color:#fff;background-color: red; border-radius: 50% !important;"
+        style="
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 10px;
+          color: #fff;
+          background-color: red;
+          border-radius: 50% !important;
+        "
         icon="mdi-delete-outline"
       >
       </v-btn>
@@ -38,21 +45,17 @@
         <!-- <v-icon style="font-size: 60px; color: red; margin-right: 10px"
           >mdi-account-lock</v-icon
         > -->
-        <div
-          style="
-            padding: 16px 20px;
-            border: 1px solid #ea9595;
-            width: 100%;
-            background-color: #f2dede;
-            color: red;
-            margin-bottom: 40px;
-            margin-top: 20px;
-            border-radius: 3px;
-            font-size: 16px;
-            font-weight: 600;
-          "
-        >
-          <span>Bạn có chắc chắn muốn xóa thông báo này chứ ? </span>
+
+        <div class="mb-3 col-12 mb-0">
+          <div class="alert alert-warning">
+            <h6 class="alert-heading fw-bold mb-1">
+              Bạn có chắc rằng bạn muốn xóa thông báo này?
+            </h6>
+            <p class="mb-0">
+              Sau khi bạn xóa thông báo này, bạn sẽ không thể quay lại. Hãy đảm
+              bảo rằng bạn đã chắc chắn.
+            </p>
+          </div>
         </div>
       </v-card-text>
       <v-card-actions style="border-top: 1px solid #ddd; padding: 16px">
@@ -70,9 +73,9 @@ const props = defineProps({
   notify: {
     type: Object,
   },
-  callback:{
+  callback: {
     type: Function,
-  }
+  },
 });
 const dialog1 = ref(false);
 const {
@@ -86,10 +89,10 @@ const {
 })(`/notifications/${props.notify.id}`, { immediate: false });
 resDeletePost(() => {});
 errDeletePost(() => {});
-const deleteNotify = () => {
-  delPost().json().execute();
-  props.callback();
+const deleteNotify = async () => {
   dialog1.value = false;
+  await delPost().json().execute();
+  await props.callback();
 };
 </script>
 

@@ -1,6 +1,17 @@
 <template>
   <div class="container">
-    <v-row>
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+    ></v-progress-circular>
+    <v-row v-if="!loading">
       <v-col cols="12" lg="4" sm="12">
         <div class="img">
           <img src="/images/groups/g1.png" alt="" />
@@ -27,58 +38,67 @@
         </p>
         <p class="information">
           <span>Loại nhóm học</span>
-          {{ group.self_study == 0 ? "Nhóm tìm kiếm mentor" : "Nhóm tự học"   }}
+          {{ group.self_study == 0 ? "Nhóm tìm kiếm mentor" : "Nhóm tự học" }}
         </p>
       </v-col>
     </v-row>
-    <v-row class="mt-3">
-      <v-col cols="12" sm="12">
+    <v-row class="mt-3" v-if="!loading">
+      <v-col cols="12" sm="8">
         <p><span>Người tạo nhóm :</span></p>
         <p class="mb-0">
-          <NuxtLink :to="{ path:`/users/${group.membersAccepted[0].id}`}" class="full">
-              {{group.membersAccepted[0].full_name}} - Khoa {{group.membersAccepted[0].faculty}}
-            </NuxtLink>
+          <NuxtLink
+            :to="{ path: `/users/${group.membersAccepted[0].id}` }"
+            class="full"
+          >
+            {{ group.membersAccepted[0].full_name }} - Khoa
+            {{ group.membersAccepted[0].faculty }}
+          </NuxtLink>
         </p>
         <p><span>Thành viên hiện có:</span> {{ group.quantity }} thành viên</p>
-        <div class="header_fixed">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Id</th>
-                          <th>Họ và tên</th>
-                          <th>Khoa</th>
-                          <th>Trạng thái</th>  
-                          <th>Hành động</th>                        
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(user, index) in group.membersAccepted" :key="index">
-                          <td>{{ user.id }}</td>
-
-                          <td>
-                            {{ user.full_name }}
-                          </td>
-                          <td>
-                            {{ user.faculty }}
-                          </td>
-                          <td>
-                            {{ user.status == 0 ? "Chờ duyệt" : "Đã duyệt" }}
-                          </td>
-                          <td>
-
-                            <button @click="navigateTo(`/users/${user.id}`)">
-                              <v-icon class="pr-3">mdi-eye</v-icon>Xem
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>  
       </v-col>
       <v-col cols="12" sm="4">
-        <h5>Chức năng :</h5>
         <div class="control-btn">
-          <v-btn color="success" @click="submit"> {{ group.self_study == 0 ? "Tìm kiếm mentor" : "Tạo nhóm học"   }} </v-btn>
+          <v-btn color="success" @click="submit(group.quantity,group.subject,group.faculty)">
+            {{ group.self_study == 0 ? "Tìm kiếm mentor" : "Tạo nhóm học" }}
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row class="mt-3" v-if="!loading">
+      <v-col cols="12">
+        <h3>Thông tin member:</h3>
+        <div class="header_fixed">
+          <table>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Họ và tên</th>
+                <th>Khoa</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(user, index) in group.membersAccepted" :key="index">
+                <td>{{ user.id }}</td>
+
+                <td>
+                  {{ user.full_name }}
+                </td>
+                <td>
+                  {{ user.faculty }}
+                </td>
+                <td>
+                  {{ user.status == 0 ? "Khóa tài khoản" : "Đang hoạt động" }}
+                </td>
+                <td>
+                  <button @click="navigateTo(`/users/${user.id}`)">
+                    <v-icon class="pr-3">mdi-eye</v-icon>Xem
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </v-col>
     </v-row>
@@ -89,7 +109,8 @@ definePageMeta({
   layout: "default",
   middleware: "authenticated",
 });
-const { $toast } = useNuxtApp()
+const { $toast } = useNuxtApp();
+const loading = ref(true);
 const route = useRoute();
 const groupId = ref({
   group_id: "",
@@ -100,20 +121,22 @@ const group = ref({
   subject: "",
   title: "",
   information: "",
-  topic:"",
-  self_study:"",
-  time_study:"",
+  topic: "",
+  self_study: "",
+  time_study: "",
   quantity: "",
   membersAccepted: [
     {
       full_name: "",
       faculty: "",
-      id:0,
+      id: 0,
     },
   ],
-
 });
-
+const newPost = ref({
+  title: "",
+  content: "",
+});
 const {
   data: dataGetGroup,
   get: getGroup,
@@ -127,6 +150,7 @@ getGroup().json().execute();
 getGroupRes(() => {
   group.value = dataGetGroup.value.data.data;
   groupId.value.group_id = group.value.id;
+  loading.value = false;
 });
 
 const {
@@ -142,7 +166,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPut(() => {
   // myUsers.value = dataPut.value.data.data;
-  console.log("ok")
+  console.log("ok");
 });
 errPut(() => {
   if (codePut.value === getConfig("constants.statusCodes.validation")) {
@@ -150,10 +174,43 @@ errPut(() => {
   }
   return false;
 });
-const submit = () => {
-  put().json().execute();
-  $toast('Nhóm bắt đầu tìm mentor', 'success', 1500);
-  navigateTo("/groups")
+
+const {
+  data: dataPost,
+  onFetchResponse: resPost,
+  onFetchError: errPost,
+  statusCode: codePost,
+  post,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})("/notifications", { immediate: false });
+// Trả về khi put thông tin cá nhân
+resPost(() => {
+  // myUsers.value = dataPut.value.data.data;
+  $toast("Tạo thông báo thành công", "success", 1500);
+});
+errPost(() => {
+  if (codePost.value === getConfig("constants.statusCodes.validation")) {
+    validationErrorMessages.value = dataPost.value.meta.error_message;
+  }
+  return false;
+});
+
+const submit = (quantity,subject,faculty) => {
+  if (quantity < 3) {
+    $toast("số lượng thành viên quá ít", "error", 1500);
+    $toast(`Nhóm ${route.params.id} đã được tạo`, "success", 1500);
+    newPost.value.title = "Thông báo tuyển mentor hướng dẫn";
+    newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} bắt đầu tìm kiếm mentor, các bạn có thể vào đăng ký`;
+    post(newPost.value).json().execute();
+    newPost.value.title = "";
+    newPost.value.content = "";
+  } else {
+    $toast("Nhóm bắt đầu tìm mentor", "success", 1500);
+    put().json().execute();
+    navigateTo("/groups");
+  }
 };
 </script>
 <style scoped>
@@ -202,7 +259,7 @@ h5 {
   display: flex;
   padding-top: 20px;
   align-items: center;
-  justify-content: space-around;
+  justify-content: right;
 }
 .v-btn {
   width: 200px;
@@ -249,10 +306,10 @@ thead th:nth-child(3) {
 }
 
 thead th:nth-child(4) {
-  width: 10%;
+  width: 15%;
 }
 thead th:nth-child(5) {
-  width: 20%;
+  width: 15%;
 }
 
 td button {
@@ -266,5 +323,7 @@ td button {
 td button:hover {
   opacity: 0.8;
 }
-
+table {
+  width: 100%;
+}
 </style>

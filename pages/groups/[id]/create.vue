@@ -8,7 +8,18 @@
         <div class="profile-tab">
           <h3>Thông tin đăng ký tạo mới group</h3>
           <h4>1. Thông tin cơ bản</h4>
-          <div class="row" style="padding: 5px 10px 20px 10px">
+          <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+    ></v-progress-circular>
+          <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
             <div class="col-md-12">
               <div class="row">
             <div class="col-md-6">
@@ -86,7 +97,18 @@
       <div class="container emp-profile">
         <div class="profile-tab">
           <h4>2. Thông tin nhóm học</h4>
-          <div class="row" style="padding: 5px 10px 20px 10px">
+          <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+    ></v-progress-circular>
+          <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
@@ -152,7 +174,18 @@
       <div class="container emp-profile">
         <div class="profile-tab">
           <h4>3. Câu hỏi duyệt thành viên :</h4>
-          <div class="row" style="padding: 5px 10px 20px 10px">
+          <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+    ></v-progress-circular>
+          <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
@@ -182,7 +215,7 @@
           </div>
         </div>
         <div class="control-btn">
-          <v-btn variant="flat" color="error" @click="deleteGroup">Xoá </v-btn>
+          <v-btn variant="flat" color="error" @click="deleteGroup(data.subject,data.faculty)">Xoá </v-btn>
           <v-btn variant="flat" color="success" @click="submit">Duyệt</v-btn>
         </div>
       </div>
@@ -191,8 +224,9 @@
 </template>
 
 <script setup>
+const { $toast } = useNuxtApp();
 const route = useRoute();
-
+const loading = ref(true);
 const data = ref({
   answers: [],
   faculty: "",
@@ -207,6 +241,10 @@ const data = ref({
   subject: "",
   time_study: "",
   topic: "",
+});
+const newPost = ref({
+  title: "",
+  content: "",
 });
 // const data = ref({});
 
@@ -228,7 +266,7 @@ const {
 getGroupsCreate().json().execute();
 getGroupsCreateResponse(() => {
   data.value = dataGetGroupsCreate.value.data.data;
-  console.log(data.value);
+  loading.value = false;
 });
 
 const {
@@ -252,9 +290,49 @@ errPut(() => {
   }
   return false;
 });
+const {
+  data: dataPost,
+  onFetchResponse: resPost,
+  onFetchError: errPost,
+  statusCode: codePost,
+  post,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})("/notifications", { immediate: false });
+// Trả về khi put thông tin cá nhân
+resPost(() => {
+  // myUsers.value = dataPut.value.data.data;
+  $toast("Tạo thông báo thành công", "success", 1500);
+});
+errPost(() => {
+  if (codePost.value === getConfig("constants.statusCodes.validation")) {
+    validationErrorMessages.value = dataPost.value.meta.error_message;
+  }
+  return false;
+});
+
 const submit = () => {
   put().json().execute();
+  $toast(`Nhóm ${route.params.id} đã được tạo`, 'success', 1500)
+  newPost.value.title = "Thông báo tuyển thành viên";
+  newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} được tạo, các bạn có thể vào đăng ký`;
   navigateTo("/groups");
+  post(newPost.value).json().execute();
+  newPost.value.title = "";
+  newPost.value.content = "";
+};
+
+const deleteGroup = (subject,faculty) => {
+  $toast(`Nhóm ${route.params.id} đã được tạo`, 'success', 1500)
+  newPost.value.title = "Thông báo tuyển thành viên";
+  newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} được tạo, các bạn có thể vào đăng ký`;
+  navigateTo("/groups");
+  post(newPost.value).json().execute();
+  newPost.value.title = "";
+  newPost.value.content = "";
+
+
 };
 </script>
 

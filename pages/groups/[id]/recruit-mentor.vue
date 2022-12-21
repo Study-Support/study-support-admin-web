@@ -1,6 +1,18 @@
 <template>
   <div class="container">
-    <v-row>
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+    ></v-progress-circular>
+    <v-row v-if="!loading"></v-row>
+    <v-row v-if="!loading">
       <v-col cols="12" lg="4" sm="12">
         <div class="img">
           <img src="/images/groups/g1.png" alt="" />
@@ -31,7 +43,7 @@
         </p>       
       </v-col>
     </v-row>
-    <v-row class="mt-3">
+    <v-row class="mt-3" v-if="!loading">
       <v-col cols="12" sm="12">
         <p><span>Thành viên hiện có:</span> {{ group.quantity }} thành viên</p>
         <div v-for="(member, index) in group.membersAccepted" :key="member.id">
@@ -41,20 +53,15 @@
               {{ member.faculty }}
             </NuxtLink>
           </p>
-        </div>
-        <p><span>Mentor đã duyệt:</span></p>
-        {{ group.mentorAccepted.id }}
-        <NuxtLink
-          :to="{ path: `/mentors/${group.mentorAccepted.id}` }"
-          class="full"
-        >
-          {{ group.mentorAccepted.full_name }} _ Khoa:
-          {{ group.mentorAccepted.faculty }}
-        </NuxtLink>
-        <h3 class="h3-cus" style="padding-left: 10px; padding-top: 20px">
+        </div>   
+        <h3 class="h3-cus" style="padding-left: 10px; padding-top: 20px" v-if="group.mentorWaiting.length == 0">
+          Hiện tại nhóm chưa có mentor
+        </h3>    
+        <h3 class="h3-cus" style="padding-left: 10px; padding-top: 20px" v-if="group.mentorWaiting.length > 0">
           Thông tin Mentor đăng ký :
         </h3>
-        <div class="header_fixed">
+
+        <div class="header_fixed" v-if="group.mentorWaiting.length > 0">
           <table>
             <thead>
               <tr>
@@ -92,6 +99,7 @@ definePageMeta({
   layout: "default",
   middleware: "authenticated",
 });
+const loading = ref(true);
 const { $toast } = useNuxtApp();
 const route = useRoute();
 const groupId = ref({
@@ -146,6 +154,7 @@ getGroup().json().execute();
 getGroupRes(() => {
   group.value = dataGetGroup.value.data.data;
   groupId.value.group_id = group.value.id;
+  loading.value = false;
 });
 
 const {
@@ -245,6 +254,9 @@ h5 {
   width: 100%;
   overflow: auto;
   border-top: 3px solid red;
+}
+table{
+  width: 100%;
 }
 .container {
   max-width: 1318px;

@@ -68,7 +68,7 @@
                     <v-btn
                       color="black"
                       text
-                      @click="dialog = false"
+                      @click="handleClose"
                       variant="outlined"
                       style="background-color: #fff"
                     >
@@ -102,7 +102,7 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="!loading">
               <tr v-for="(post, index) in posts" :key="index">
                 <!-- <td><input type="checkbox" data-check-all-item/></td> -->
                 <td>{{ index + 1 }}</td>
@@ -116,9 +116,9 @@
                 </td>
                 <td>{{ post.created_at.slice(0, 10) }}</td>
                 <!-- <td>{{ post.created_at.slice(0, 10) }}</td> -->
-                <td style="margin:auto">
-                  <NotificationForm :notify="post"/>
-                  <DeleteNotifyForm :notify="post" :callback="handleReload"/>
+                <td style="margin: auto">
+                  <NotificationForm :notify="post" />
+                  <DeleteNotifyForm :notify="post" :callback="handleReload" />
                   <!-- <v-btn
                 <td>
                   <button
@@ -143,25 +143,30 @@
                     icon="mdi-delete-outline"
                   >
                   </v-btn> -->
-                    <!-- <v-icon>mdi-clipboard-edit-outline</v-icon>
+                  <!-- <v-icon>mdi-clipboard-edit-outline</v-icon>
                   </button>                   -->
                 </td>
               </tr>
             </tbody>
-            
           </table>
           <v-progress-circular
-              indeterminate
-              color="primary"
-              style="display: flex;justify-content: center;align-items: center;margin:auto"
-              v-if="loading"
-            ></v-progress-circular>
+            indeterminate
+            color="primary"
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin: auto;
+            "
+            v-if="loading"
+          ></v-progress-circular>
 
           <v-pagination
             v-model="page"
             :length="pagination.total_page"
             color="purple"
             @click="handleChangePage"
+            show-first-last-page
           ></v-pagination>
         </div>
       </v-row>
@@ -176,11 +181,14 @@
 </template>
 
 <script setup>
+import NotificationForm from "../../components/dialogForm/NotificationForm.vue";
+import DeleteNotifyForm from "../../components/dialogForm/DeleteNotifyForm.vue";
 definePageMeta({
   layout: "default",
   middleware: "authenticated",
 });
-const { $toast } = useNuxtApp()
+
+const { $toast } = useNuxtApp();
 const page = ref(1);
 const router = useRouter();
 const route = useRoute();
@@ -246,7 +254,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPost(() => {
   // myUsers.value = dataPut.value.data.data;
-  $toast('Tạo thông báo thành công', 'success', 1500);
+  $toast("Tạo thông báo thành công", "success", 1500);
 });
 errPost(() => {
   if (codePost.value === getConfig("constants.statusCodes.validation")) {
@@ -255,30 +263,34 @@ errPost(() => {
   return false;
 });
 
-const submit = () => {
-  post(newPost.value).json().execute();
+const submit = async () => {
+  loading.value = true;
+  await post(newPost.value).json().execute();
   newPost.value.title = "";
   newPost.value.content = "";
-  getPosts().json().execute();
-  loading.value = true;
+  await getPosts().json().execute();
 };
 
 const handleChangePage = () => {
-  console.log(page.value);
+  loading.value = true;
   getPosts().json().execute();
 };
 const handleClose = () => {
   dialog.value = false;
   newPost.value.title = "";
   newPost.value.content = "";
-}
-const handleReload = () =>{
+};
+const handleReload = async () => {
   loading.value = true;
-  getPosts().json().execute();
-  $toast('Xóa thông báo thành công', 'success', 1500);
-
-
-}
+  if (posts.value.length == 1) {
+    page.value -= 1;
+    await getPosts().json().execute();
+    console.log(page.value);
+  } else {
+    await getPosts().json().execute();
+  }
+  $toast("Xóa thông báo thành công", "success", 1500);
+};
 </script>
 <style lang="scss" scoped>
 .v-card {
@@ -412,7 +424,6 @@ td:nth-child(1) {
   border-radius: 10px;
 }
 .v-dialog .v-overlay__content > .v-card {
-  border-radius: 20px;
+  border-radius: 5px;
 }
-
 </style>

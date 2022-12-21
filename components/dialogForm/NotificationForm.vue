@@ -40,7 +40,7 @@
           color: #fff;
         "
       >
-        <span class="text-h5"> Thông báo mới :</span>
+        <span class="text-h5"> Chỉnh sửa thông báo :</span>
       </v-card-title>
       <form @submit.prevent="submit">
         <div style="text-align: center; padding: 16px">
@@ -91,6 +91,7 @@ const props = defineProps({
     type: Object,
   },
 });
+
 const dialog = ref(false);
 const {
   data: dataPost,

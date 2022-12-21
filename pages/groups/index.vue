@@ -49,7 +49,11 @@
                       <!-- <td>{{ group.members[0].full_name }}</td> -->
                       <td>{{ group.subject }}</td>
                       <td>{{ group.topic }}</td>
-                      <td>{{ group.seft_study ? "Nhóm có mentor" : "Nhóm tự học" }}</td>
+                      <td>
+                        {{
+                          group.seft_study ? "Nhóm có mentor" : "Nhóm tự học"
+                        }}
+                      </td>
                       <td>
                         <button
                           @click="navigateTo(`/groups/${group.id}/create`)"
@@ -61,16 +65,21 @@
                   </tbody>
                 </table>
                 <v-progress-circular
-              indeterminate
-              color="primary"
-              v-if="loading"
-              style="display: flex;justify-content: center;align-items: center;margin:auto"
-              ></v-progress-circular>
+                  indeterminate
+                  color="primary"
+                  v-if="loading"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: auto;
+                  "
+                ></v-progress-circular>
                 <v-pagination
                   v-model="page"
-                  :length="totalPages"
-                  total-visible="7"
+                  :length="pagination.total_page"
                   color="purple"
+                  @click="handleChangePage"
                 ></v-pagination>
               </div>
             </v-card-text>
@@ -93,15 +102,22 @@
             <v-progress-circular
               indeterminate
               color="primary"
-              v-if="loading"
-              style="display: flex;justify-content: center;align-items: center;margin:auto; padding-top:80px;"
-              ></v-progress-circular>
+              v-if="loading1"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                padding-top: 80px;
+              "
+            ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                v-model="model"
-                :length="4"
-                rounded="circle"
-              ></v-pagination>
+                  v-model="page1"
+                  :length="pagination1.total_page"
+                  color="purple"
+                  @click="handleChangePage1"
+                ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -122,15 +138,22 @@
             <v-progress-circular
               indeterminate
               color="primary"
-              v-if="loading"
-              style="display: flex;justify-content: center;align-items: center;margin:auto; padding-top:80px;"
-              ></v-progress-circular>
+              v-if="loading2"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                padding-top: 80px;
+              "
+            ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                v-model="model"
-                :length="4"
-                rounded="circle"
-              ></v-pagination>
+                  v-model="page2"
+                  :length="pagination2.total_page"
+                  color="purple"
+                  @click="handleChangePage2"
+                ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -151,15 +174,22 @@
             <v-progress-circular
               indeterminate
               color="primary"
-              v-if="loading"
-              style="display: flex;justify-content: center;align-items: center;margin:auto; padding-top:80px;"
-              ></v-progress-circular>
+              v-if="loading3"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                padding-top: 80px;
+              "
+            ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                v-model="model"
-                :length="4"
-                rounded="circle"
-              ></v-pagination>
+                  v-model="page3"
+                  :length="pagination3.total_page"
+                  color="purple"
+                  @click="handleChangePage3"
+                ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -177,14 +207,25 @@
                 <GroupCard :group="group" />
               </v-col>
             </v-row>
-            
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              v-if="loading4"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                padding-top: 80px;
+              "
+            ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                v-model="model"
-                :length="4"
-                rounded="circle"
-                style="padding-top:16px"
-              ></v-pagination>
+                  v-model="page4"
+                  :length="pagination4.total_page"
+                  color="purple"
+                  @click="handleChangePage4"
+                ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -196,42 +237,102 @@
 <script setup>
 import GroupCard from "../../components/groups/GroupCard.vue";
 const tab = ref("option-1");
-const groups = ref([]);
+// const groups = ref([]);
 const groupsCreate = ref([]);
 const groups1 = ref([]);
 const groups2 = ref([]);
 const groups3 = ref([]);
 const groups4 = ref([]);
 const loading = ref(true);
+const loading1 = ref(true);
+const loading2 = ref(true);
+const loading3 = ref(true);
+const loading4 = ref(true);
+const page = ref(1);
+const page1 = ref(1);
+const page2 = ref(1);
+const page3 = ref(1);
+const page4 = ref(1);
+const pagination = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination1 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination2 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination3 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination4 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+
+const handleChangePage = () => {
+  loading.value = true;
+  getGroupsCreate().json().execute();
+};
+const handleChangePage1 = () => {
+  loading1.value = true;
+  getGroups1().json().execute();
+};
+const handleChangePage2 = () => {
+  loading2.value = true;
+  getGroups2().json().execute();
+};
+const handleChangePage3 = () => {
+  loading3.value = true;
+  getGroups3().json().execute();
+};
+const handleChangePage4 = () => {
+  loading4.value = true;
+  getGroups4().json().execute();
+};
 
 const { url: url0 } = useUrl({
   path: "/groups",
   queryParams: {
     status: 0,
+    page: page,
   },
 });
 const { url: url1 } = useUrl({
   path: "/groups",
   queryParams: {
     status: 1,
+    page: page1,
   },
 });
 const { url: url2 } = useUrl({
   path: "/groups",
   queryParams: {
     status: 2,
+    page: page2,
   },
 });
 const { url: url3 } = useUrl({
   path: "/groups",
   queryParams: {
     status: 3,
+    page: page3,
   },
 });
 const { url: url4 } = useUrl({
   path: "/groups",
   queryParams: {
     status: 4,
+    page: page4,
   },
 });
 
@@ -246,7 +347,8 @@ const {
 getGroupsCreate().json().execute();
 getGroupsCreateResponse(() => {
   groupsCreate.value = dataGetGroupsCreate.value.data.data;
-  console.log( groupsCreate.value)
+  pagination.value = dataGetGroupsCreate.value.data.pagination;
+  console.log(groupsCreate.value);
   loading.value = false;
 });
 
@@ -268,6 +370,8 @@ const {
 getGroups1().json().execute();
 getGroupsResponse1(() => {
   groups1.value = dataGetGroups1.value.data.data;
+  pagination1.value = dataGetGroups1.value.data.pagination;
+  loading1.value = false;
 });
 
 const {
@@ -281,6 +385,8 @@ const {
 getGroups2().json().execute();
 getGroupsResponse2(() => {
   groups2.value = dataGetGroups2.value.data.data;
+  pagination2.value = dataGetGroups2.value.data.pagination;
+  loading2.value = false;
 });
 
 const {
@@ -294,6 +400,8 @@ const {
 getGroups3().json().execute();
 getGroupsResponse3(() => {
   groups3.value = dataGetGroups3.value.data.data;
+  pagination3.value = dataGetGroups3.value.data.pagination;
+  loading3.value = false;
 });
 
 const {
@@ -307,10 +415,10 @@ const {
 getGroups4().json().execute();
 getGroupsResponse4(() => {
   groups4.value = dataGetGroups4.value.data.data;
+  pagination4.value = dataGetGroups4.value.data.pagination;
+
+  loading4.value = false;
 });
-
-
-
 </script>
 
 <style scoped>

@@ -74,7 +74,8 @@
                       </NuxtLink>
                     </p>
                   </div>
-                  <p><span>Mentor đã duyệt:</span></p>
+                  <div v-if="group.mentorAccepted != null">
+                    <p><span>Mentor đã duyệt:</span></p>
                   <NuxtLink
                     :to="{ path: `/mentors/${group.mentorAccepted.id}` }"
                     class="full"
@@ -82,6 +83,7 @@
                     {{ group.mentorAccepted.full_name }} _ Khoa:
                     {{ group.mentorAccepted.faculty }}
                   </NuxtLink>
+                  </div>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <h5>trạng thái :</h5>
@@ -167,7 +169,7 @@ const {
 
 const bb = () => {
   allChat.value = [];
-  onValue(firebaseRef(databaseFirebase, `groups/1`), (data) => {
+  onValue(firebaseRef(databaseFirebase, `groups/${route.params.id}`), (data) => {
     allChat.value = [];
     data.forEach((d) => {
       allChat.value.push(d.val());
