@@ -84,9 +84,10 @@
               ></v-progress-circular>
               <div class="text-center">
                 <v-pagination
-                  v-model="model"
-                  :length="1"
-                  rounded="circle"
+                  v-model="page"
+                  :length="pagination.total_page"
+                  color="purple"
+                  @click="handleChangePage"
                 ></v-pagination>
               </div>
             </div>
@@ -258,6 +259,12 @@ const newPost = ref({
   title: "",
   content: "",
 });
+const page = ref(1);
+const pagination = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
 const filter = ref({
   a: {
     search: route.query.search === undefined ? "" : route.query.search,
@@ -284,25 +291,12 @@ const {
   requireAuth: true,
   disableHandleErrorUnauthorized: true,
 })(urlMentor, { immediate: false });
-
-// getFilterMentors().json().execute();
+getFilterMentors().json().execute();
 
 getFilterMentorsResponse(() => {
-  // console.log(dataGetFilterMentors.value.data.data);
-  // console.log("ok");
-  if (dataGetFilterMentors.value.data.data.length !== 0) {
-    myMentors.value = myMentors.value.concat(
-      dataGetFilterMentors.value.data.data
-    );
-    // console.log("tesst cua mentors");
-  }
-  // console.log(dataGetFilterMentors.value.data.data.length);
-  if (
-    dataGetFilterMentors.value.data.data.length <
-    getConfig("constants.pagination")
-  )
-    loading.value = false;
-  // myMentors.value = dataGetMentors.value.data.data;
+  myMentors.value = dataGetFilterMentors.value.data.data;
+  pagination.value = dataGetFilterMentors.value.data.pagination;
+  loading.value = false;
 });
 
 const {
@@ -328,6 +322,10 @@ const {
   disableHandleErrorUnauthorized: true,
 })(url1, { immediate: false });
 
+const handleChangePage = () => {
+  loading.value = true;
+  getFilterMentors().json().execute();
+};
 const search = () => {
   filter.value.a.page = 1;
   router.replace({
@@ -346,8 +344,6 @@ const search1 = () => {
   // myMentors.value = [];
   // console.log("Ok :1", loading1);
 };
-
-getFilterMentors().json().execute();
 
 getFaculty().json().execute();
 getFacultyResponse(() => {

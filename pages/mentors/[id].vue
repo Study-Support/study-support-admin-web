@@ -50,7 +50,7 @@
                               class="d-flex align-items-start align-items-sm-center gap-4"
                             >
                               <img
-                                src="/images/user.png"
+                                :src="`${myMentors.avatar_url}`"
                                 alt="user-avatar"
                                 class="d-block rounded"
                                 height="100"
@@ -115,7 +115,7 @@
                                     >Rating</label
                                   >
                                   <!-- type="number" -->
-                                  {{ myMentors.rating_score }}
+                                  <!-- {{ myMentors.rating_score }} -->
                                   <input
                                     class="form-control"
                                     v-model="myMentors.rating_score"
@@ -298,44 +298,124 @@
                   </v-card>
                 </v-window-item>
                 <v-window-item value="option-3">
-                  <v-card flat>
-                    <div class="mentor-review">
-                      <h3>Đánh giá từ mentor :</h3>
-                      <v-col cols="12" class="cus-table">
-                        <div class="header_fixed">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>No.</th>
-                                <th>Tên người đánh giá</th>
-                                <th>Group</th>
-                                <th>điểm</th>
-                                <th>Nhận xét</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr
-                                v-for="(rating, index) in ratings"
-                                :key="index"
+                  <v-card>
+                    <div class="d-flex flex-row">
+                      <v-tabs
+                        v-model="tab1"
+                        direction="vertical"
+                        color="primary"
+                        style="padding-top: 80px"
+                      >
+                        <v-tab value="option-1">Từ member </v-tab>
+                        <v-tab value="option-2"> Tới member </v-tab>
+                      </v-tabs>
+                      <v-window v-model="tab1">
+                        <v-window-item value="option-1">
+                          <v-card flat>
+                            <v-toolbar>
+                              <v-card-title class="text-center justify-center">
+                                <h3 class="h3-cus">
+                                  Chi tiết đánh giá :
+                                  <span v-if="ratings.length > 0">{{
+                                    myMentors.rating_score
+                                  }}</span>
+                                </h3>
+                              </v-card-title>
+                            </v-toolbar>
+                            <v-card-text>
+                              <div v-if="ratings.length == 0">
+                                <h3>Hiện chưa có rating</h3>
+                              </div>
+                              <div
+                                class="header_fixed"
+                                v-if="ratings.length > 0"
                               >
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ rating.account_from }}</td>
-                                <td>
-                                  {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
-                                </td>
-                                <td>{{ rating.rating }} / 10</td>
-                                <td>{{ rating.comment }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <v-pagination
-                            v-model="page"
-                            :length="totalPages"
-                            total-visible="7"
-                            color="purple"
-                          ></v-pagination>
-                        </div>
-                      </v-col>
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>Tên người đánh giá</th>
+                                      <th>Topic</th>
+                                      <th>Điểm</th>
+                                      <th>Nhận xét</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      v-for="(rating, index) in ratings"
+                                      :key="index"
+                                    >
+                                      <td>{{ index + 1 }}</td>
+                                      <td>{{ rating.account_from }}</td>
+                                      <td>
+                                        {{ rating.group }}
+                                      </td>
+                                      <td>{{ rating.rating }}/10</td>
+                                      <td>{{ rating.comment }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <v-pagination
+                                  v-model="page"
+                                  :length="totalPages"
+                                  total-visible="7"
+                                  color="purple"
+                                ></v-pagination>
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-window-item>
+                        <v-window-item value="option-2">
+                          <v-card flat>
+                            <v-toolbar>
+                              <v-card-title class="text-center justify-center">
+                                <h3 class="h3-cus">Chi tiết đánh giá :</h3>
+                              </v-card-title>
+                            </v-toolbar>
+                            <v-card-text>
+                              <div v-if="ratings_from.length == 0">
+                                <h3>Hiện chưa có rating</h3>
+                              </div>
+                              <div
+                                class="header_fixed"
+                                v-if="ratings_from.length > 0"
+                              >
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>Người được đánh giá</th>
+                                      <th>Topic</th>
+                                      <th>Điểm</th>
+                                      <th>Nhận xét</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      v-for="(rating, index) in ratings_from"
+                                      :key="index"
+                                    >
+                                      <td>{{ index + 1 }}</td>
+                                      <td>{{ rating.account_to }}</td>
+                                      <td>
+                                        {{ rating.group }}
+                                      </td>
+                                      <td>{{ rating.rating }}/10</td>
+                                      <td>{{ rating.comment }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <v-pagination
+                                  v-model="page"
+                                  :length="totalPages"
+                                  total-visible="7"
+                                  color="purple"
+                                ></v-pagination>
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-window-item>
+                      </v-window>
                     </div>
                   </v-card>
                 </v-window-item>
@@ -353,6 +433,8 @@ const route = useRoute();
 const faculties = ref({});
 const loading = ref(true);
 const loading1 = ref(false);
+const tab1 = ref("option-1");
+const ratings_from = ref([]);
 const ratings = ref([]);
 const subject_list = ref([]);
 const subject = ref({
@@ -406,6 +488,7 @@ getMentors().json().execute();
 getMentorsResponse(() => {
   myMentors.value = dataGetMentors.value.data.data;
   ratings.value = dataGetMentors.value.data.data.ratings;
+  ratings_from.value = dataGetMentors.value.data.data.ratings_from;
   subject_list.value = dataGetMentors.value.data.data.subject_list;
   groupsMentor.value = dataGetMentors.value.data.data.groups;
   loading.value = false;

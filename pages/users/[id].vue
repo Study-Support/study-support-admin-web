@@ -281,46 +281,125 @@
                   </v-card>
                 </v-window-item>
                 <v-window-item value="option-3">
-                  <v-card flat>
-                    <v-toolbar>
-                      <v-card-title class="text-center justify-center">
-                        <h3 class="h3-cus">Chi tiết đánh giá :</h3>
-                      </v-card-title>
-                    </v-toolbar>
-                    <v-card-text>
-                      <div class="header_fixed">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>No.</th>
-                              <th>Tên người đánh giá</th>
-                              <th>Group</th>
-                              <th>điểm</th>
-                              <th>Nhận xét</th>
-                              <!-- <th>thời gian</th> -->
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="(rating, index) in ratings" :key="index">
-                              <td>{{ index + 1 }}</td>
-                              <td>{{ rating.account_from }}</td>
-                              <td>
-                                {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
-                              </td>
-                              <td>{{ rating.rating }}/10</td>
-                              <td>{{ rating.comment }}</td>
-                              <!-- <td>{{ rating.created_at }}</td> -->
-                            </tr>
-                          </tbody>
-                        </table>
-                        <v-pagination
-                          v-model="page"
-                          :length="totalPages"
-                          total-visible="7"
-                          color="purple"
-                        ></v-pagination>
-                      </div>
-                    </v-card-text>
+                  <v-card>
+                    <div class="d-flex flex-row">
+                      <v-tabs
+                        v-model="tab1"
+                        direction="vertical"
+                        color="primary"
+                        style="padding-top: 80px"
+                      >
+                        <v-tab value="option-1">Từ mentor </v-tab>
+                        <v-tab value="option-2"> Tới mentor </v-tab>
+                      </v-tabs>
+                      <v-window v-model="tab1">
+                        <v-window-item value="option-1">
+                          <v-card flat>
+                            <v-toolbar>
+                              <v-card-title class="text-center justify-center">
+                                <h3 class="h3-cus">
+                                  Chi tiết đánh giá :
+                                  <span v-if="ratings.length > 0">{{
+                                    Math.round(myUsers.rating_score * 100) / 100
+                                  }}</span>
+                                </h3>
+                              </v-card-title>
+                            </v-toolbar>
+                            <v-card-text>
+                              <div v-if="ratings_from.length == 0">
+                                <h3>Hiện chưa có rating</h3>
+                              </div>
+                              <div
+                                class="header_fixed"
+                                v-if="ratings_from.length > 0"
+                              >
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>Tên người đánh giá</th>
+                                      <th>Topic</th>
+                                      <th>điểm</th>
+                                      <th>Nhận xét</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      v-for="(rating, index) in ratings"
+                                      :key="index"
+                                    >
+                                      <td>{{ index + 1 }}</td>
+                                      <td>{{ rating.account_from }}</td>
+                                      <td>
+                                        {{ rating.group }}
+                                      </td>
+                                      <td>{{ rating.rating }}/10</td>
+                                      <td>{{ rating.comment }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <v-pagination
+                                  v-model="page"
+                                  :length="totalPages"
+                                  total-visible="7"
+                                  color="purple"
+                                ></v-pagination>
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-window-item>
+                        <v-window-item value="option-2">
+                          <v-card flat>
+                            <v-toolbar>
+                              <v-card-title class="text-center justify-center">
+                                <h3 class="h3-cus">Chi tiết đánh giá :</h3>
+                              </v-card-title>
+                            </v-toolbar>
+                            <v-card-text>
+                              <div v-if="ratings_from.length == 0">
+                                <h3>Hiện chưa có rating</h3>
+                              </div>
+                              <div
+                                class="header_fixed"
+                                v-if="ratings_from.length > 0"
+                              >
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>Tên người đánh giá</th>
+                                      <th>Topic</th>
+                                      <th>điểm</th>
+                                      <th>Nhận xét</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      v-for="(rating, index) in ratings_from"
+                                      :key="index"
+                                    >
+                                      <td>{{ index + 1 }}</td>
+                                      <td>{{ rating.account_from }}</td>
+                                      <td>
+                                        {{ rating.group }}
+                                      </td>
+                                      <td>{{ rating.rating }}/10</td>
+                                      <td>{{ rating.comment }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <v-pagination
+                                  v-model="page"
+                                  :length="totalPages"
+                                  total-visible="7"
+                                  color="purple"
+                                ></v-pagination>
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-window-item>
+                      </v-window>
+                    </div>
                   </v-card>
                 </v-window-item>
               </v-window>
@@ -337,7 +416,9 @@ import LockUserForm from "../../components/dialogForm/LockUserForm.vue";
 const { $toast } = useNuxtApp();
 const groupsUser = ref([]);
 const ratings = ref([]);
+const ratings_from = ref([]);
 const tab = ref("option-1");
+const tab1 = ref("option-1");
 const loading = ref(true);
 const route = useRoute();
 const faculties = ref({});
@@ -388,6 +469,7 @@ getUsers().json().execute();
 getUsersResponse(() => {
   myUsers.value = dataGetUsers.value.data.data;
   ratings.value = dataGetUsers.value.data.data.ratings;
+  ratings_from.value = dataGetUsers.value.data.data.ratings_from;
   groupsUser.value = dataGetUsers.value.data.data.groups;
   loading.value = false;
 });
