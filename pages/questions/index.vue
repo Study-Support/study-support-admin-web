@@ -163,7 +163,6 @@ const router = useRouter();
 const route = useRoute();
 const dialog = ref(false);
 const loading = ref(true);
-const isDisable = ref(false);
 const questions = ref([]);
 const newQuestion = ref({
   id: "",
@@ -239,7 +238,7 @@ const {
 } = useFetchApi({
   requireAuth: true,
   disableHandleErrorUnauthorized: true,
-})("/mentor-questions", { immediate: false });
+})("/notifications", { immediate: false });
 // Trả về khi put thông tin cá nhân
 resPost(() => {
   // myUsers.value = dataPut.value.data.data;
@@ -260,14 +259,13 @@ const submit = async () => {
       1500
     );
     newQuestion.value.content = "";
-  }else{
-
+  } else {
     loading.value = true;
-  
+
     await post(newQuestion.value).json().execute();
     newQuestion.value.content = "";
     await getQuestions().json().execute();
-    
+
     newPost.value.title = "Thông báo câu hỏi cho mentor";
     newPost.value.content = `Câu hỏi mentor đã thay đổi, các bạn cần chú ý!`;
     await post1(newPost.value).json().execute();
@@ -280,7 +278,7 @@ const handleReload = async () => {
   if (questions.value.length == 1) {
     page.value -= 1;
     await getQuestions().json().execute();
-    console.log(page.value);
+    // console.log(page.value);
   } else {
     await getQuestions().json().execute();
   }

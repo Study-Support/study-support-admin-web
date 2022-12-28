@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent>
     <v-btn
       icon="mdi-close-thick"
-      @click="dialog = false"
+      @click="handleClose"
       style="
         position: absolute;
         right: 10px;
@@ -45,6 +45,8 @@
             prepend-icon="mdi-comment"
             v-model="question.content"
             variant="outlined"
+            :rules="contentRules"
+            :counter="500"
           ></v-text-field>
           <div class="d-flex flex-wrap gap-2 flex-row-reverse"></div>
         </div>
@@ -53,19 +55,13 @@
           <v-btn
             color="black"
             text
-            @click="dialog = false"
+            @click="handleClose"
             variant="outlined"
             style="background-color: #fff"
           >
             Đóng
           </v-btn>
-          <v-btn
-            text
-            @click="dialog = false"
-            type="submit"
-            variant="flat"
-            color="secondary"
-          >
+          <v-btn text type="submit" variant="flat" color="secondary">
             Lưu
           </v-btn>
         </v-card-actions>
@@ -79,7 +75,12 @@ const props = defineProps({
     type: Object,
   },
 });
+const { $toast } = useNuxtApp();
 const dialog = ref(false);
+const contentRules = ref([
+  (v) => !!v || "Nội dung thông báo là bắt buộc",
+  (v) => v.length <= 500 || "Nội dung thông báo chỉ có tối đa 500 ký tự",
+]);
 const {
   data: dataQuestions,
   onFetchResponse: resQuestions,
@@ -90,23 +91,25 @@ const {
   requireAuth: true,
   disableHandleErrorUnauthorized: true,
 })(`/mentor-questions/${props.question.id}`, { immediate: false });
-// })(`/notifications/`, { immediate: false });
+
 resQuestions(() => {
-  // myUsers.value = dataPut.value.data.data;
+  $toast("Cập nhật câu hỏi thành công", "success", 1500);
 });
 errQuestions(() => {
-  //   if (codeQuestions.value === getConfig("constants.statusCodes.validation")) {
-  //     validationErrorMessages.value = dataQuestions.value.meta.error_message;
-  //   }
-  //   return false;
-
-  console.log("loi");
+  $toast("Cập nhật câu hỏi thất bại", "error", 1500);
 });
 
 const submit = () => {
-  console.log(props.question.content);
-
-  put(props.question).json().execute();
+  // console.log(props.question.content);
+  if (props.question.content == "") {
+    return;
+  } else {
+    handleClose();
+    put(props.question).json().execute();
+  }
+};
+const handleClose = () => {
+  dialog.value = false;
 };
 </script>
 <style scoped>

@@ -2,14 +2,19 @@
   <NuxtLink :to="{ path: `/mentors/${mentor.id}` }" class="full">
     <!-- <NuxtLink :to="{ path: `/manage-groups/${group.id}` }" class="full"> -->
     <div class="box">
-      <img src="/images/m1.jpg" alt="" class="img" />
+      <img :src="`${mentor.avatar_url}`" alt="" class="img" />
       <div class="info">
         <div class="title">
           {{ mentor.full_name }}
         </div>
         <span class="desc">Khoa:{{ mentor.faculty }}</span>
         <div class="share">
-          <span>{{ mentor.rating_score }}/10</span>
+          <span v-if="mentor.rating_score != null"
+            >{{ mentor.rating_score }}/10</span
+          >
+          <span v-if="mentor.rating_score == null"
+            >Mentor chưa được đánh giá</span
+          >
           <!-- <span>{{ mentor.rating_score.slice(0, 3) }}/10</span> -->
         </div>
       </div>

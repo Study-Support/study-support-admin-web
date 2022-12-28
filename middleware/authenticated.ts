@@ -1,9 +1,9 @@
 export default defineNuxtRouteMiddleware(() => {
-  const {token} = useToken();
+  const { token } = useToken();
 
   if (token.value === undefined) {
-    console.log("ok11")
-    return navigateTo({name: 'login'});
+    // console.log("ok11")
+    return navigateTo({ name: 'login' });
   }
   return true;
 });

@@ -7,7 +7,7 @@
             <v-col cols="12" sm="6" md="6" lg="3">
               <div class="input-group search" id="search">
                 <input
-                  v-model="filter.a.search"
+                  v-model="filter.a.full_name"
                   class="form-control border input-cus"
                   type="search"
                   placeholder="Sinh viên"
@@ -17,30 +17,21 @@
             <v-col cols="12" sm="6" md="6" lg="3">
               <div>
                 <select
-                  v-model="filter.a.type"
+                  v-model="filter.a.is_active"
                   class="form-select select-cus"
                   id="type"
                   required
                 >
-                  <option
-                    :value="getConfig('constants.typeOfUser.all')"
-                    selected
-                  >
-                    Tất cả
-                  </option>
-                  <option :value="getConfig('constants.typeOfUser.active')">
-                    đang hoạt động
-                  </option>
-                  <option :value="getConfig('constants.typeOfUser.block')">
-                    khóa tài khoản
-                  </option>
+                  <option value="" selected>Tất cả</option>
+                  <option :value="1">đang hoạt động</option>
+                  <option :value="0">khóa tài khoản</option>
                 </select>
               </div>
             </v-col>
             <v-col cols="12" sm="6" md="6" lg="3">
               <div>
                 <select
-                  v-model="filter.a.faculty"
+                  v-model="filter.a.faculty_id"
                   class="form-select select-cus"
                   required
                 >
@@ -104,11 +95,11 @@
                 v-if="loading"
               ></v-progress-circular>
               <v-pagination
-                  v-model="page"
-                  :length="pagination.total_page"
-                  color="purple"
-                  @click="handleChangePage"
-                ></v-pagination>
+                v-model="page"
+                :length="pagination.total_page"
+                color="purple"
+                @click="handleChangePage"
+              ></v-pagination>
             </div>
           </v-row>
         </v-col>
@@ -136,9 +127,11 @@ const loading = ref(true);
 const myUsers = ref([]);
 const filter = ref({
   a: {
-    search: route.query.search === undefined ? "" : route.query.search,
-    faculty: route.query.faculty === undefined ? "" : route.query.faculty,
-    type: route.query.type === undefined ? "" : route.query.type,
+    full_name: route.query.full_name === undefined ? "" : route.query.full_name,
+    faculty_id:
+      route.query.faculty_id === undefined ? "" : route.query.faculty_id,
+    is_active: route.query.is_active === undefined ? "" : route.query.is_active,
+    page: page,
   },
 });
 const handleChangePage = () => {
@@ -147,10 +140,7 @@ const handleChangePage = () => {
 };
 const { url: urlUser } = useUrl({
   path: "/users",
-  queryParams: {
-    queryParams: filter.value.a,
-    page: page,
-  },
+  queryParams: filter.value.a,
 });
 
 const {
@@ -166,12 +156,12 @@ const {
 getFilterUsers().json().execute();
 
 getFilterUsersResponse(() => {
-    myUsers.value = dataGetFilterUsers.value.data.data;
-    pagination.value = dataGetFilterUsers.value.data.pagination;
+  myUsers.value = dataGetFilterUsers.value.data.data;
+  pagination.value = dataGetFilterUsers.value.data.pagination;
 
   loading.value = false;
   // myUsers.value = dataGetUsers.value.data.data;
-  console.log(myUsers.value);
+  // console.log(myUsers.value);
 });
 
 const {
@@ -193,6 +183,7 @@ const search = () => {
     query: filter.value.a,
   });
   myUsers.value = [];
+  console.log(filter.value.a);
   getFilterUsers().json().execute();
 };
 </script>

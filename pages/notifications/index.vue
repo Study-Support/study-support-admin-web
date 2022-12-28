@@ -20,8 +20,8 @@
               Search
             </v-btn>
           </v-col>
-          <v-col cols="12" sm="6" md="6" lg="3"></v-col>
-          <v-col cols="12" sm="6" md="6" lg="3">
+          <v-col cols="12" sm="6" md="4" lg="3"></v-col>
+          <v-col cols="12" sm="6" md="4" lg="3">
             <v-dialog v-model="dialog" persistent>
               <template v-slot:activator="{ props }">
                 <v-btn
@@ -47,19 +47,31 @@
                 >
                   <span class="text-h5"> Thông báo mới :</span>
                 </v-card-title>
-                <form @submit.prevent="submit">
+
+                <v-form
+                  ref="form"
+                  @submit.prevent="submit"
+                  v-model="valid"
+                  lazy-validation
+                >
                   <div style="text-align: center; padding: 16px">
                     <v-text-field
                       label="Title"
                       background-color="light-blue"
                       prepend-icon="mdi-account"
                       v-model="newPost.title"
+                      :rules="titleRules"
+                      :counter="100"
+                      required
                     ></v-text-field>
                     <v-textarea
                       color="black"
                       label="Label"
                       prepend-icon="mdi-comment"
                       v-model="newPost.content"
+                      :rules="contentRules"
+                      :counter="500"
+                      required
                     ></v-textarea>
                     <div class="d-flex flex-wrap gap-2 flex-row-reverse"></div>
                   </div>
@@ -74,17 +86,11 @@
                     >
                       Đóng
                     </v-btn>
-                    <v-btn
-                      text
-                      @click="dialog = false"
-                      type="submit"
-                      variant="flat"
-                      color="secondary"
-                    >
+                    <v-btn text type="submit" variant="flat" color="secondary">
                       Lưu
                     </v-btn>
                   </v-card-actions>
-                </form>
+                </v-form>
               </v-card>
             </v-dialog>
           </v-col>
@@ -95,7 +101,6 @@
           <table>
             <thead>
               <tr>
-                <!-- <th><input type="checkbox" v-model="checkAll" data-check-all/></th> -->
                 <th>No.</th>
                 <th>Content</th>
                 <th>Time</th>
@@ -104,47 +109,22 @@
             </thead>
             <tbody v-if="!loading">
               <tr v-for="(post, index) in posts" :key="index">
-                <!-- <td><input type="checkbox" data-check-all-item/></td> -->
                 <td>{{ index + 1 }}</td>
                 <td class="td-cus">
-                  <h3>
+                  <h3 class="title">
                     {{ post.title }}
                   </h3>
-                  <p>
+                  <p class="content">
                     {{ post.content }}
                   </p>
                 </td>
                 <td>{{ post.created_at.slice(0, 10) }}</td>
                 <!-- <td>{{ post.created_at.slice(0, 10) }}</td> -->
-                <td style="margin: auto">
-                  <NotificationForm :notify="post" />
-                  <DeleteNotifyForm :notify="post" :callback="handleReload" />
-                  <!-- <v-btn
                 <td>
-                  <button
-                    @click="navigateTo(`/notifications/${post.id}`)"
-                    style="
-                      margin-left: 10px;
-                      background-color: #05b187;
-                      color: #fff;
-                    "
-                  >
-                  </v-btn>
-                  <v-btn
-                    @click="navigateTo(`/notifications/${post.id}`)"
-                    style="
-                      margin-top:10px;
-                      margin-left: auto;
-                      margin-right: auto;
-                      color: red;
-                      background-color: #fff;
-                      border-radius: 50% !important;
-                    "
-                    icon="mdi-delete-outline"
-                  >
-                  </v-btn> -->
-                  <!-- <v-icon>mdi-clipboard-edit-outline</v-icon>
-                  </button>                   -->
+                  <div style="display: flex; justify-content: center">
+                    <NotificationForm :notify="post" />
+                    <DeleteNotifyForm :notify="post" :callback="handleReload" />
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -189,9 +169,11 @@ definePageMeta({
 });
 
 const { $toast } = useNuxtApp();
+
 const page = ref(1);
 const router = useRouter();
 const route = useRoute();
+const valid = ref(true);
 const dialog = ref(false);
 const loading = ref(true);
 const posts = ref([]);
@@ -199,6 +181,14 @@ const newPost = ref({
   title: "",
   content: "",
 });
+const titleRules = ref([
+  (v) => !!v || "Tiêu đề thông báo là bắt buộc",
+  (v) => v.length <= 100 || "Tiêu đề thông báo chỉ có tối đa 100 ký tự",
+]);
+const contentRules = ref([
+  (v) => !!v || "Nội dung thông báo là bắt buộc",
+  (v) => v.length <= 500 || "Nội dung thông báo chỉ có tối đa 500 ký tự",
+]);
 const pagination = ref({
   current_page: 0,
   total_page: 0,
@@ -257,18 +247,25 @@ resPost(() => {
   $toast("Tạo thông báo thành công", "success", 1500);
 });
 errPost(() => {
-  if (codePost.value === getConfig("constants.statusCodes.validation")) {
-    validationErrorMessages.value = dataPost.value.meta.error_message;
-  }
-  return false;
+  $toast("Tạo thông báo thất bại, bạn vui lòng thử lại sau !", "error", 1500);
 });
 
 const submit = async () => {
-  loading.value = true;
-  await post(newPost.value).json().execute();
-  newPost.value.title = "";
-  newPost.value.content = "";
-  await getPosts().json().execute();
+  if (
+    newPost.value.title == "" ||
+    newPost.value.content == "" ||
+    newPost.value.title.length > 100 ||
+    newPost.value.title.length > 500
+  ) {
+    return;
+  } else {
+    handleSubmit();
+    loading.value = true;
+    await post(newPost.value).json().execute();
+    newPost.value.title = "";
+    newPost.value.content = "";
+    await getPosts().json().execute();
+  }
 };
 
 const handleChangePage = () => {
@@ -285,12 +282,49 @@ const handleReload = async () => {
   if (posts.value.length == 1) {
     page.value -= 1;
     await getPosts().json().execute();
-    console.log(page.value);
+    // console.log(page.value);
   } else {
     await getPosts().json().execute();
   }
   $toast("Xóa thông báo thành công", "success", 1500);
 };
+const handleSubmit = () => {
+  // if (newPost.value.title == "" || newPost.value.content == "") {
+  //   return;
+  // } else {
+
+  // }
+  //
+  dialog.value = false;
+};
+
+// const {
+//   database: databaseFirebase,
+//   ref: firebaseRef,
+//   push,
+//   onValue,
+// } = useFirebase1();
+// let result = ref([]);
+// const a = () => {
+//   result.value = [];
+//   push(firebaseRef(databaseFirebase, "notification"), {
+//     title: "thunhu",
+//     content: "aaaaa",
+//   });
+// };
+// const bb = () => {
+//   result.value = [];
+//   console.log(result.value);
+//   onValue(firebaseRef(databaseFirebase, "notification"), (data) => {
+//     result.value = [];
+//     data.forEach((d) => {
+//       result.value.push(d.val());
+//     });
+//   });
+// };
+// onMounted(() => {
+//   bb();
+// });
 </script>
 <style lang="scss" scoped>
 .v-card {
@@ -425,5 +459,23 @@ td:nth-child(1) {
 }
 .v-dialog .v-overlay__content > .v-card {
   border-radius: 5px;
+}
+.title {
+  display: -webkit-box;
+  overflow: hidden;
+  box-sizing: border-box;
+  word-break: break-all;
+  white-space: pre-line;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.content {
+  display: -webkit-box;
+  overflow: hidden;
+  box-sizing: border-box;
+  word-break: break-all;
+  white-space: pre-line;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 </style>

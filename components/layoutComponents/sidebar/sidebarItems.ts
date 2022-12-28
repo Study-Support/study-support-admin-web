@@ -1,9 +1,9 @@
 export default [
-  // {
-  //   title: "Trang chủ",
-  //   icon: "mdi-view-dashboard-edit",
-  //   to: "/",
-  // },
+  {
+    title: "Trang chủ",
+    icon: "mdi-view-dashboard-edit",
+    to: "/",
+  },
   {
     title: "Quản lý sinh viên",
     icon: "mdi-account-school",
@@ -14,11 +14,11 @@ export default [
     icon: "mdi-human-male-board-poll",
     to: "/mentors",
   },
-  {
-    title: "Quản lý câu hỏi",
-    icon: "mdi-account-question",
-    to: "/questions",
-  },
+  // {
+  //   title: "Quản lý câu hỏi",
+  //   icon: "mdi-account-question",
+  //   to: "/questions",
+  // },
   {
     title: "Quản lý nhóm học",
     icon: "mdi-account-group",

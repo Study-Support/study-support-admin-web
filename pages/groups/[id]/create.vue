@@ -2,89 +2,89 @@
   <div class="wrap">
     <div>
       <div class="tabs-container">
-        <div>Phần 1/3</div>
+        <div>Phần 1/2</div>
       </div>
       <div class="container emp-profile tab1">
         <div class="profile-tab">
           <h3>Thông tin đăng ký tạo mới group</h3>
           <h4>1. Thông tin cơ bản</h4>
           <v-progress-circular
-      indeterminate
-      color="primary"
-      v-if="loading"
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: auto;
-      "
-    ></v-progress-circular>
+            indeterminate
+            color="primary"
+            v-if="loading"
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin: auto;
+            "
+          ></v-progress-circular>
           <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
             <div class="col-md-12">
               <div class="row">
-            <div class="col-md-6">
-              <div class="row" style="justify-content:center;">
-                <div class="col-md-12">
-                  <label>Sinh viên đăng ký: </label>
+                <div class="col-md-6">
+                  <div class="row" style="justify-content: center">
+                    <div class="col-md-12">
+                      <label>Sinh viên đăng ký: </label>
+                    </div>
+                    <div class="col-md-9">
+                      <input
+                        class="border-bottom"
+                        type="text"
+                        disabled
+                        v-model="data.membersAccepted[0].full_name"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-9">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    disabled
-                    v-model="data.membersAccepted[0].full_name"
-                    />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row" style="justify-content:center;">
-                <div class="col-md-12">
-                  <label>Khoa đang theo học:</label>
-                </div>
-                <div class="col-md-9">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    disabled
-                    v-model="data.faculty"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row" style="justify-content:center;">
-                <div class="col-md-12">
-                  <label>Môn học đăng ký:</label>
-                </div>
-                <div class="col-md-9">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    disabled
-                    v-model="data.subject"
-                  />
+                <div class="col-md-6">
+                  <div class="row" style="justify-content: center">
+                    <div class="col-md-12">
+                      <label>Khoa đang theo học:</label>
+                    </div>
+                    <div class="col-md-9">
+                      <input
+                        class="border-bottom"
+                        type="text"
+                        disabled
+                        v-model="data.faculty"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row" style="justify-content:center;">
-                <div class="col-md-12">
-                  <label>Phân loại nhóm học:</label>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row" style="justify-content: center">
+                    <div class="col-md-12">
+                      <label>Môn học đăng ký:</label>
+                    </div>
+                    <div class="col-md-9">
+                      <input
+                        class="border-bottom"
+                        type="text"
+                        disabled
+                        v-model="data.subject"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-9">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    disabled
-                    v-model="data.self_study"
-                  />
+                <div class="col-md-6">
+                  <div class="row" style="justify-content: center">
+                    <div class="col-md-12">
+                      <label>Phân loại nhóm học:</label>
+                    </div>
+                    <div class="col-md-9">
+                      <input
+                        class="border-bottom"
+                        type="text"
+                        disabled
+                        v-model="array[data.self_study]"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
             </div>
           </div>
         </div>
@@ -92,22 +92,22 @@
     </div>
     <div class="cus-tab">
       <div class="tabs-container">
-        <div>Phần 2/3</div>
+        <div>Phần 2/2</div>
       </div>
       <div class="container emp-profile">
         <div class="profile-tab">
           <h4>2. Thông tin nhóm học</h4>
           <v-progress-circular
-      indeterminate
-      color="primary"
-      v-if="loading"
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: auto;
-      "
-    ></v-progress-circular>
+            indeterminate
+            color="primary"
+            v-if="loading"
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin: auto;
+            "
+          ></v-progress-circular>
           <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
             <div class="col-md-12">
               <div class="row">
@@ -116,7 +116,7 @@
                 </div>
                 <div class="col-md-12">
                   <input
-                    class="border-bottom "
+                    class="border-bottom"
                     type="text"
                     disabled
                     v-model="data.topic"
@@ -165,58 +165,19 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="cus-tab">
-      <div class="tabs-container">
-        <div>Phần 3/3</div>
-      </div>
-      <div class="container emp-profile">
-        <div class="profile-tab">
-          <h4>3. Câu hỏi duyệt thành viên :</h4>
-          <v-progress-circular
-      indeterminate
-      color="primary"
-      v-if="loading"
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: auto;
-      "
-    ></v-progress-circular>
-          <div class="row" style="padding: 5px 10px 20px 10px" v-if="!loading">
-            <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Câu 1:</label>
-                </div>
-                <div class="col-md-12">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    placeholder="Sinh viên"
-                  />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Câu 2:</label>
-                </div>
-                <div class="col-md-12">
-                  <input
-                    class="border-bottom "
-                    type="text"
-                    placeholder="Sinh viên"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="control-btn">
-          <v-btn variant="flat" color="error" @click="deleteGroup(data.subject,data.faculty)">Xoá </v-btn>
-          <v-btn variant="flat" color="success" @click="submit">Duyệt</v-btn>
+          <v-btn
+            variant="flat"
+            color="error"
+            @click="deleteGroup(data.subject, data.faculty)"
+            >Xoá
+          </v-btn>
+          <v-btn
+            variant="flat"
+            color="success"
+            @click="submit(data.subject, data.faculty)"
+            >Duyệt</v-btn
+          >
         </div>
       </div>
     </div>
@@ -224,20 +185,26 @@
 </template>
 
 <script setup>
+var array = {
+  0: "Nhóm có mentor",
+  1: "Nhóm tự học",
+};
 const { $toast } = useNuxtApp();
 const route = useRoute();
 const loading = ref(true);
 const data = ref({
   answers: [],
   faculty: "",
-  information:"",
-  location_study:"",
-  membersAccepted: [{
-    id:"",
-    full_name:"",
-    faculty: "",
-  }],
-  self_study: "",
+  information: "",
+  location_study: "",
+  membersAccepted: [
+    {
+      id: "",
+      full_name: "",
+      faculty: "",
+    },
+  ],
+  self_study: 0,
   subject: "",
   time_study: "",
   topic: "",
@@ -282,7 +249,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPut(() => {
   // myUsers.value = dataPut.value.data.data;
-  console.log("ok")
+  // console.log("ok");
 });
 errPut(() => {
   if (codePut.value === getConfig("constants.statusCodes.validation")) {
@@ -312,9 +279,9 @@ errPost(() => {
   return false;
 });
 
-const submit = () => {
+const submit = (subject, faculty) => {
   put().json().execute();
-  $toast(`Nhóm ${route.params.id} đã được tạo`, 'success', 1500)
+  $toast(`Nhóm ${route.params.id} đã được tạo`, "success", 1500);
   newPost.value.title = "Thông báo tuyển thành viên";
   newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} được tạo, các bạn có thể vào đăng ký`;
   navigateTo("/groups");
@@ -323,16 +290,14 @@ const submit = () => {
   newPost.value.content = "";
 };
 
-const deleteGroup = (subject,faculty) => {
-  $toast(`Nhóm ${route.params.id} đã được tạo`, 'success', 1500)
+const deleteGroup = (subject, faculty) => {
+  $toast(`Nhóm ${route.params.id} đã được tạo`, "success", 1500);
   newPost.value.title = "Thông báo tuyển thành viên";
   newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} được tạo, các bạn có thể vào đăng ký`;
   navigateTo("/groups");
   post(newPost.value).json().execute();
   newPost.value.title = "";
   newPost.value.content = "";
-
-
 };
 </script>
 
@@ -343,7 +308,8 @@ const deleteGroup = (subject,faculty) => {
   width: 80%;
   border: 1px solid #ddd;
   border-top: 10px solid #1261a6;
-  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
+    rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 .emp-profile h3 {
   text-align: center;
@@ -390,10 +356,10 @@ textarea {
   padding: 5px 10px;
   color: #fff;
 }
-.cus-tab{
-  margin-top:20px;
+.cus-tab {
+  margin-top: 20px;
 }
-.tab1 label{
-  padding-left:10%;
+.tab1 label {
+  padding-left: 10%;
 }
 </style>

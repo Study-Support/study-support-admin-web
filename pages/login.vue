@@ -7,7 +7,7 @@
       </div>
       <div class="login-content">
         <form @submit.prevent="submit">
-          <img src="/images/images.png" class="img1"/>
+          <img src="/images/images.png" class="img1" />
           <h2 class="title">Welcome</h2>
           <div class="input-div one">
             <div class="i">
@@ -17,6 +17,7 @@
               <v-text-field
                 v-model="requestBody.email"
                 label="Username"
+                :rules="emailRules"
                 variant="underlined"
                 type="email"
                 required
@@ -34,20 +35,15 @@
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="show1 = !show1"
                 variant="underlined"
+                :rules="nameRules"
+                :counter="20"
                 :type="show1 ? 'text' : 'password'"
                 v-model="requestBody.password"
                 required
-                counter
               ></v-text-field>
             </div>
           </div>
-          <input
-            type="submit"
-            class="btn"
-            value="Login"
-            :isDisabled="isDisabledButton"
-            :content="'Login'"
-          />
+          <input type="submit" class="btn" value="Login" :content="'Login'" />
         </form>
       </div>
     </div>
@@ -61,8 +57,15 @@ definePageMeta({
 
 const { $toast } = useNuxtApp();
 const { setToken } = useToken();
-const { getConfig } = useConfig();
 const requestBody = ref({ email: "", password: "" });
+const nameRules = ref([
+  (v) => !!v || "Thông tin mật khẩu là bắt buộc",
+  (v) => v.length <= 20 || "Mật khẩu chỉ có tối đa 20 ký tự",
+]);
+const emailRules = ref([
+  (v) => !!v || " Thông tin E-mail là bắt buộc",
+  (v) => /.+@.+/.test(v) || "E-mail phải tồn tại",
+]);
 const unauthorizedErrorMessage = ref("");
 const isDisabledButton = ref(false);
 const show1 = ref(false);
@@ -76,20 +79,12 @@ const { data, statusCode, onFetchResponse, onFetchError, post } = useFetchApi({
 onFetchResponse(() => {
   setToken(data.value.data.token.access_token);
   // setToken(data.value.token);
-  console.log("Ok");
-  $toast('Đăng nhập thành công', 'success', 1500)
-  return navigateTo('/users');
+  // console.log("Ok");
+  $toast("Đăng nhập thành công", "success", 1500);
+  return navigateTo("/");
 });
 onFetchError(() => {
-  console.log("Ok1");
-  if (statusCode.value === getConfig("constants.statusCodes.unauthorized")) {
-    unauthorizedErrorMessage.value = data.value.message;
-  } else if (
-    statusCode.value === getConfig("constants.statusCodes.validation")
-  ) {
-    validationErrorMessages.value = data.value;
-  }
-  isDisabledButton.value = false;
+  $toast("Đăng nhập thất bại", "error", 1500);
 });
 // submit login
 const submit = () => {

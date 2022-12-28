@@ -50,169 +50,45 @@
                               class="d-flex align-items-start align-items-sm-center gap-4"
                             >
                               <img
+                                v-if="myUsers.avatar_url !== null"
+                                :src="`${myUsers.avatar_url}`"
+                                alt="user-avatar"
+                                class="d-block rounded"
+                                height="120"
+                                width="120"
+                                id="uploadedAvatar"
+                              />
+                              <img
+                                v-if="myUsers.avatar_url === null"
                                 src="/images/user.png"
                                 alt="user-avatar"
                                 class="d-block rounded"
-                                height="100"
-                                width="100"
+                                height="120"
+                                width="120"
                                 id="uploadedAvatar"
                               />
-                              <div class="button-wrapper">
-                                <EditUserForm
-                                  :user="myUsers"
-                                  :faculties="faculties"
-                                />
-                                <LockUserForm :user="myUsers" :callback="handlePut"/>
-                                <!-- <v-dialog
-                                  v-model="dialog1"
-                                  persistent
-                                  v-if="myUsers.is_active == 1"
-                                >
-                                  <template v-slot:activator="{ props }">
-                                    <v-btn
-                                      dark
-                                      v-bind="props"
-                                      @click="dialog1 = true"
-                                      variant="flat"
-                                      color="error"
-                                      style="width: 180px; margin-top: 4px"
-                                    >
-                                      <v-icon>mdi-lock</v-icon>
-                                      Khóa tài khoản
-                                    </v-btn>
-                                  </template>
-                                  <v-card style="margin: auto">
-                                    <v-card-title
-                                      style="
-                                        text-align: center;
-                                        padding: 16px 0;
-                                        background-color: red;
-                                        color: #fff;
-                                      "
-                                      class="text-h5"
-                                    >
-                                      Khoá Tài Khoản
-                                    </v-card-title>
-                                    <v-card-text
-                                      style="display: flex; align-item: center"
-                                    >
-                                      <v-icon
-                                        style="
-                                          font-size: 60px;
-                                          color: red;
-                                          margin-right: 10px;
-                                        "
-                                        >mdi-account-lock</v-icon
-                                      >
-                                      <span
-                                        >Tài khoản sau khi khóa sẽ không thể sử
-                                        dụng các chức năng của ứng dụng cho đến
-                                        khi được mở lại.<br />
-                                        Bạn có chắc chắn muốn khóa tài khoản này
-                                        không ?</span
-                                      ></v-card-text
-                                    >
-                                    <v-card-actions
-                                      style="background-color: #ddd"
-                                    >
-                                      <v-spacer></v-spacer>
-                                      <v-btn
-                                        color="secondary"
-                                        variant="flat"
-                                        @click="dialog1 = false"
-                                      >
-                                        Hủy
-                                      </v-btn>
-                                      <v-btn
-                                        color="error"
-                                        variant="flat"
-                                        @click="handleLockAccount"
-                                      >
-                                        Đồng ý
-                                      </v-btn>
-                                    </v-card-actions>
-                                  </v-card>
-                                </v-dialog>
-                                <v-dialog
-                                  v-model="dialog1"
-                                  persistent
-                                  v-if="myUsers.is_active == 0"
-                                >
-                                  <template v-slot:activator="{ props }">
-                                    <v-btn
-                                      dark
-                                      v-bind="props"
-                                      @click="dialog1 = true"
-                                      variant="flat"
-                                      color="primary"
-                                      style="width: 180px; margin-top: 4px"
-                                    >
-                                      <v-icon>mdi-lock</v-icon>
-                                      Mở tài khoản
-                                    </v-btn>
-                                  </template>
-                                  <v-card style="margin: auto">
-                                    <v-card-title
-                                      style="
-                                        text-align: center;
-                                        padding: 16px 0;
-                                        background-color: #1e88e5;
-                                        color: #fff;
-                                      "
-                                      class="text-h5"
-                                    >
-                                      Mở tài khoản
-                                    </v-card-title>
-                                    <v-card-text
-                                      style="display: flex; align-item: center"
-                                    >
-                                      <v-icon
-                                        style="
-                                          font-size: 60px;
-                                          color: #1e88e5;
-                                          margin-right: 10px;
-                                        "
-                                        >mdi-account-lock</v-icon
-                                      >
-                                      <span
-                                        >Tài khoản sau khi khóa sẽ không thể sử
-                                        dụng các chức năng của ứng dụng cho đến
-                                        khi được mở lại. <br />
-                                        Bạn có chắc chắn muốn mở lại tài khoản
-                                        này không ?</span
-                                      ></v-card-text
-                                    >
-                                    <v-card-actions
-                                      style="background-color: #ddd"
-                                    >
-                                      <v-spacer></v-spacer>
-                                      <v-btn
-                                        color="secondary"
-                                        variant="flat"
-                                        @click="dialog1 = false"
-                                      >
-                                        Hủy
-                                      </v-btn>
-                                      <v-btn
-                                        color="error"
-                                        variant="flat"
-                                        @click="handleLockAccount"
-                                      >
-                                        Đồng ý
-                                      </v-btn>
-                                    </v-card-actions>
-                                  </v-card>
-                                </v-dialog> -->
+                              <div>
+                                <div>
+                                  <h2 style="padding-bottom: 10px">
+                                    {{ myUsers.full_name }}
+                                  </h2>
+                                </div>
+                                <div class="button-wrapper">
+                                  <EditUserForm
+                                    :user="myUsers"
+                                    :faculties="faculties"
+                                  />
+                                  <LockUserForm
+                                    :user="myUsers"
+                                    :callback="handlePut"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
                           <hr class="my-0" />
                           <div class="card-body">
-                            <form
-                              id="formAccountSettings"
-                              method="POST"
-                              onsubmit="return false"
-                            >
+                            <form>
                               <div class="row">
                                 <div class="mb-3 col-md-12">
                                   <label for="firstName" class="form-label"
@@ -374,7 +250,7 @@
                                 )
                               "
                             >
-                              <td>{{ group.id }}</td>
+                              <td>{{ index + 1 }}</td>
 
                               <td>
                                 {{ group.subject }}
@@ -427,7 +303,7 @@
                           <tbody>
                             <tr v-for="(rating, index) in ratings" :key="index">
                               <td>{{ index + 1 }}</td>
-                              <td>{{ rating.account_name }}</td>
+                              <td>{{ rating.account_from }}</td>
                               <td>
                                 {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
                               </td>
@@ -459,13 +335,13 @@
 import EditUserForm from "../../components/dialogForm/EditUserForm.vue";
 import LockUserForm from "../../components/dialogForm/LockUserForm.vue";
 const { $toast } = useNuxtApp();
-const dialog1 = ref(false);
 const groupsUser = ref([]);
 const ratings = ref([]);
 const tab = ref("option-1");
 const loading = ref(true);
 const route = useRoute();
 const faculties = ref({});
+
 const myUsers = ref({
   // id: "",
   avatar_url: "",
@@ -549,20 +425,20 @@ errPut(() => {
   $toast("Hệ thống gặp sự cố, bạn vui lòng thử lại sau", "error", 1500);
   loading.value = false;
 });
-const handlePut =() =>{
+const handlePut = () => {
   put(myUsers.value).json().execute();
-}
-const handleLockAccount = () => {
-  loading.value = true;
-  if (myUsers.value.is_active == 1) {
-    myUsers.value.is_active = 0;
-    put(myUsers.value).json().execute();
-  } else {
-    myUsers.value.is_active = 1;
-    put(myUsers.value).json().execute();
-  }
-  dialog1.value = false;
 };
+// const handleLockAccount = () => {
+//   loading.value = true;
+//   if (myUsers.value.is_active == 1) {
+//     myUsers.value.is_active = 0;
+//     put(myUsers.value).json().execute();
+//   } else {
+//     myUsers.value.is_active = 1;
+//     put(myUsers.value).json().execute();
+//   }
+//   dialog1.value = false;
+// };
 </script>
 <style scoped>
 .wrap {
@@ -743,7 +619,9 @@ input[type="date"] {
   margin-bottom: 20px;
   font-weight: 500;
 }
-
+.button-wrapper {
+  display: flex;
+}
 .mentor-review {
   padding: 10px;
   font-weight: 600;
