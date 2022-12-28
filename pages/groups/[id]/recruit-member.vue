@@ -58,7 +58,10 @@
       </v-col>
       <v-col cols="12" sm="4">
         <div class="control-btn">
-          <v-btn color="success" @click="submit(group.quantity,group.subject,group.faculty)">
+          <v-btn
+            color="success"
+            @click="submit(group.quantity, group.subject, group.faculty)"
+          >
             {{ group.self_study == 0 ? "Tìm kiếm mentor" : "Tạo nhóm học" }}
           </v-btn>
         </div>
@@ -166,7 +169,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPut(() => {
   // myUsers.value = dataPut.value.data.data;
-  console.log("ok");
+  // console.log("ok");
 });
 errPut(() => {
   if (codePut.value === getConfig("constants.statusCodes.validation")) {
@@ -197,18 +200,18 @@ errPost(() => {
   return false;
 });
 
-const submit = (quantity,subject,faculty) => {
-  if (quantity < 3) {
+const submit = (quantity, subject, faculty) => {
+  if (quantity > 3) {
     $toast("số lượng thành viên quá ít", "error", 1500);
+  } else {
+    $toast("Nhóm bắt đầu tìm mentor", "success", 1500);
+    put().json().execute();
     $toast(`Nhóm ${route.params.id} đã được tạo`, "success", 1500);
     newPost.value.title = "Thông báo tuyển mentor hướng dẫn";
     newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} bắt đầu tìm kiếm mentor, các bạn có thể vào đăng ký`;
     post(newPost.value).json().execute();
     newPost.value.title = "";
     newPost.value.content = "";
-  } else {
-    $toast("Nhóm bắt đầu tìm mentor", "success", 1500);
-    put().json().execute();
     navigateTo("/groups");
   }
 };
@@ -251,9 +254,6 @@ h5 {
   color: rgb(0, 16, 192);
   display: inline-block;
   width: 160px;
-}
-.full {
-  text-decoration: none;
 }
 .control-btn {
   display: flex;

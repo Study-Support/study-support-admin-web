@@ -4,23 +4,16 @@ import sidebarItems from "./sidebarItems";
 
 const sidebarMenu = ref(sidebarItems);
 
-const {deleteToken} = useToken();
-const {
-  onFetchResponse,
-  post,
-} = useFetchApi({
+const { deleteToken } = useToken();
+const { onFetchResponse, post } = useFetchApi({
   requireAuth: true,
   disableHandleErrorUnauthorized: false,
-})(
-  '/logout',
-  {immediate: false},
-);
+})("/logout", { immediate: false });
 
 onFetchResponse(() => {
   deleteToken();
-  return navigateTo({name: 'login'});
+  return navigateTo({ name: "login" });
 });
-
 
 const logout = () => {
   post().json().execute();
@@ -58,20 +51,15 @@ const logout = () => {
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </v-list-item>
         </template>
-        
       </v-list>
-      <v-btn @click="logout" style="width:90%; margin:auto"  color="success"> <v-icon>mdi-logout</v-icon>LOGOUT</v-btn>
-      <!-- <div class="pa-4 ma-4 bg-light-primary rounded-lg text-center">
-        <img src="/images/sidebar-buynow-bg.svg" />
-        <h4 class="font-weight-regular mb-3">Study for love</h4>
-        
-        <v-btn color="primary" href="#" block>Check 2</v-btn>
-      </div> -->
+      <v-btn @click="logout" style="width: 90%; margin: auto" color="success">
+        <v-icon>mdi-logout</v-icon>Đăng xuất</v-btn
+      >
     </div>
   </div>
 </template>
 <style scoped>
-.profile-pic{
+.profile-pic {
   display: flex;
   justify-content: center;
   align-items: center;

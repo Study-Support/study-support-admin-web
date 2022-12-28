@@ -23,8 +23,7 @@
         color="error"
         style="
           margin-left: auto;
-          margin-right: auto;
-          margin-top: 10px;
+          margin-right: auto;          
           color: #fff;
           background-color: red;
           border-radius: 50% !important;

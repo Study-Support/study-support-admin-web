@@ -8,7 +8,7 @@
           @click="handleOpen"
           variant="flat"
           color="error"
-          style="width: 180px; margin-top: 4px"
+          style="margin-left: 6px;"
           v-if="user.is_active == 1"
         >
           <v-icon>mdi-lock</v-icon>
@@ -20,7 +20,7 @@
           @click="handleOpen"
           variant="flat"
           color="primary"
-          style="width: 180px; margin-top: 4px"
+          style=" margin-left: 6px;"
           v-if="user.is_active == 0"
         >
           <v-icon>mdi-lock</v-icon>

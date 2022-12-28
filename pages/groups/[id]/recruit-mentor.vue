@@ -40,7 +40,7 @@
         <p class="information">
           <span>Loại nhóm học</span>
           {{ group.self_study == 0 ? "Nhóm tìm kiếm mentor" : "Nhóm tự học" }}
-        </p>       
+        </p>
       </v-col>
     </v-row>
     <v-row class="mt-3" v-if="!loading">
@@ -53,11 +53,19 @@
               {{ member.faculty }}
             </NuxtLink>
           </p>
-        </div>   
-        <h3 class="h3-cus" style="padding-left: 10px; padding-top: 20px" v-if="group.mentorWaiting.length == 0">
+        </div>
+        <h3
+          class="h3-cus"
+          style="padding-left: 10px; padding-top: 20px"
+          v-if="group.mentorWaiting.length == 0"
+        >
           Hiện tại nhóm chưa có mentor
-        </h3>    
-        <h3 class="h3-cus" style="padding-left: 10px; padding-top: 20px" v-if="group.mentorWaiting.length > 0">
+        </h3>
+        <h3
+          class="h3-cus"
+          style="padding-left: 10px; padding-top: 20px"
+          v-if="group.mentorWaiting.length > 0"
+        >
           Thông tin Mentor đăng ký :
         </h3>
 
@@ -73,12 +81,13 @@
             </thead>
             <tbody>
               <tr v-for="(user, index) in group.mentorWaiting" :key="index">
-                <td>{{ user.id }}</td>
-
-                <td>
+                <td @click="navigateTo(`/mentors/${user.id}`)">
+                  {{ user.id }}
+                </td>
+                <td @click="navigateTo(`/mentors/${user.id}`)">
                   {{ user.full_name }}
                 </td>
-                <td>
+                <td @click="navigateTo(`/mentors/${user.id}`)">
                   {{ user.faculty }}
                 </td>
                 <td>
@@ -170,7 +179,7 @@ const {
 // Trả về khi put thông tin cá nhân
 resPut(() => {
   // myUsers.value = dataPut.value.data.data;
-  console.log("ok");
+  // console.log("ok");
 });
 const submit = () => {
   put().json().execute();
@@ -192,11 +201,11 @@ const {
 // Trả về khi put thông tin cá nhân
 resPutMentor(() => {
   // myUsers.value = dataPut.value.data.data;
-  console.log("ok");
+  // console.log("ok");
 });
 const submitMentor = (id) => {
   mentorAccept.value.account_id = id;
-  console.log(id);
+  // console.log(id);
   put1(mentorAccept.value).json().execute();
   $toast("Duyệt Mentor thành công", "success", 1500);
   navigateTo("/groups");
@@ -255,7 +264,7 @@ h5 {
   overflow: auto;
   border-top: 3px solid red;
 }
-table{
+table {
   width: 100%;
 }
 .container {

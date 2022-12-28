@@ -15,32 +15,32 @@
       <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Quản lý Mentor /</span> Tài khoản
       </h4>
-    <div class="profile-user">
-      <div class="col-md-12 col-cus">
-        <v-card>
-          <v-toolbar class="toolbar-cus">
-            <v-toolbar-title >
-              <v-tabs v-model="tab" color="primary">
-                <v-tab value="option-1" class="option-btn">
-                  <v-icon start> mdi-account </v-icon>
-                  Thông tin mentor :
-                </v-tab>
-                <v-tab value="option-2" class="option-btn">
-                  <v-icon start> mdi-access-point </v-icon>
-                  Nhóm học :
-                </v-tab>
-                <v-tab value="option-3" class="option-btn">
-                  <v-icon start> mdi-text-box </v-icon>
-                  Đánh giá :
-                </v-tab>
-              </v-tabs>
-            </v-toolbar-title>
-          </v-toolbar>
-          <div class="flex-row">
-            <v-window v-model="tab">
-              <v-window-item value="option-1">
-                <v-card flat>
-                  <div class="row">
+      <div class="profile-user">
+        <div class="col-md-12 col-cus">
+          <v-card>
+            <v-toolbar class="toolbar-cus">
+              <v-toolbar-title>
+                <v-tabs v-model="tab" color="primary">
+                  <v-tab value="option-1" class="option-btn">
+                    <v-icon start> mdi-account </v-icon>
+                    Thông tin mentor :
+                  </v-tab>
+                  <v-tab value="option-2" class="option-btn">
+                    <v-icon start> mdi-access-point </v-icon>
+                    Nhóm học :
+                  </v-tab>
+                  <v-tab value="option-3" class="option-btn">
+                    <v-icon start> mdi-text-box </v-icon>
+                    Đánh giá :
+                  </v-tab>
+                </v-tabs>
+              </v-toolbar-title>
+            </v-toolbar>
+            <div class="flex-row">
+              <v-window v-model="tab">
+                <v-window-item value="option-1">
+                  <v-card flat>
+                    <div class="row">
                       <div class="col-md-12">
                         <div class="card mb-4">
                           <h5 class="card-header">Profile Details</h5>
@@ -57,81 +57,16 @@
                                 width="100"
                                 id="uploadedAvatar"
                               />
-                              <div class="button-wrapper">                                
-                                <v-dialog v-model="dialog1" persistent>
-                                  <template v-slot:activator="{ props }">
-                                    <v-btn
-                                      dark
-                                      v-bind="props"
-                                      @click="dialog1 = true"
-                                      variant="flat"
-                                      color="error"
-                                      style="width: 180px; margin-top: 4px"
-                                    >
-                                      <v-icon>mdi-lock</v-icon>
-                                      Khóa tài khoản
-                                    </v-btn>
-                                  </template>
-                                  <v-card style="width: 50%; margin: auto">
-                                    <v-card-title
-                                      style="
-                                        text-align: center;
-                                        padding: 16px 0;
-                                        background-color: red;
-                                        color: #fff;
-                                      "
-                                      class="text-h5"
-                                    >
-                                      Khoá Tài Khoản
-                                    </v-card-title>
-                                    <v-card-text
-                                      style="display: flex; align-item: center"
-                                    >
-                                      <v-icon
-                                        style="
-                                          font-size: 60px;
-                                          color: red;
-                                          margin-right: 10px;
-                                        "
-                                        >mdi-account-lock</v-icon
-                                      >
-                                      <span
-                                        >Tài khoản sau khi khóa sẽ không thể sử
-                                        dụng các chức năng của ứng dụng cho đến
-                                        khi được mở lại.</span
-                                      ></v-card-text
-                                    >
-                                    <v-card-actions
-                                      style="background-color: #ddd"
-                                    >
-                                      <v-spacer></v-spacer>
-                                      <v-btn
-                                        color="secondary"
-                                        variant="flat"
-                                        @click="dialog1 = false"
-                                      >
-                                        Hủy
-                                      </v-btn>
-                                      <v-btn
-                                        color="error"
-                                        variant="flat"
-                                        @click="dialog1 = false"
-                                      >
-                                        Đồng ý
-                                      </v-btn>
-                                    </v-card-actions>
-                                  </v-card>
-                                </v-dialog>
+                              <div class="button-wrapper">
+                                <h2 style="padding-bottom: 10px">
+                                  {{ myMentors.full_name }}
+                                </h2>
                               </div>
                             </div>
                           </div>
                           <hr class="my-0" />
                           <div class="card-body">
-                            <form
-                              id="formAccountSettings"
-                              method="POST"
-                              onsubmit="return false"
-                            >
+                            <form>
                               <div class="row">
                                 <div class="mb-3 col-md-12">
                                   <label for="firstName" class="form-label"
@@ -140,9 +75,7 @@
                                   <input
                                     class="form-control"
                                     type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    v-model="myMentors .full_name"
+                                    v-model="myMentors.full_name"
                                     autofocus=""
                                     disabled
                                   />
@@ -156,18 +89,22 @@
                                     class="select2 form-select"
                                     disabled
                                   >
-                                    <option value="1">{{  myMentors.is_active == 0 ? "Đã khóa":"Đang hoạt động" }}</option>
+                                    <option value="1">
+                                      {{
+                                        myMentors.is_active == 0
+                                          ? "Đã khóa"
+                                          : "Đang hoạt động"
+                                      }}
+                                    </option>
                                   </select>
-                                </div>                             
-                               <div class="mb-3 col-md-6">
+                                </div>
+                                <div class="mb-3 col-md-6">
                                   <label class="form-label" for="country"
                                     >Số môn học đã nhận</label
                                   >
                                   <input
                                     class="form-control"
                                     type="text"
-                                    id="firstName"
-                                    name="firstName"
                                     v-model="myMentors.number_of_subjects"
                                     autofocus=""
                                     disabled
@@ -177,11 +114,10 @@
                                   <label for="language" class="form-label"
                                     >Rating</label
                                   >
+                                  <!-- type="number" -->
+                                  {{ myMentors.rating_score }}
                                   <input
                                     class="form-control"
-                                    type="text"
-                                    id="firstName"
-                                    name="firstName"
                                     v-model="myMentors.rating_score"
                                     autofocus=""
                                     disabled
@@ -194,8 +130,6 @@
                                   <input
                                     class="form-control"
                                     type="text"
-                                    id="firstName"
-                                    name="firstName"
                                     v-model="myMentors.smart_banking"
                                     autofocus=""
                                     disabled
@@ -211,7 +145,7 @@
                                     disabled
                                   >
                                     <option value="">
-                                     {{ myMentors.faculty }}
+                                      {{ myMentors.faculty }}
                                     </option>
                                   </select>
                                 </div>
@@ -222,54 +156,85 @@
                         </div>
                       </div>
                     </div>
-                  <h3 class="h3-cus" style="padding-left:10px;">Thông tin hồ sơ môn học :</h3>
-                  <div class="header_fixed">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>No.</th>
+                    <h3 class="h3-cus" style="padding-left: 10px">
+                      Thông tin hồ sơ môn học :
+                    </h3>
+                    <div class="header_fixed">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>No.</th>
 
-                          <th>Môn học</th>
-                          <th>Hồ sơ</th>
-                          <th>Trạng thái</th>
-                          <th>Hành động</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(group, index) in subject_list" :key="index">
-                          <td>{{ index + 1 }}</td>
+                            <th>Môn học</th>
+                            <th>Hồ sơ</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                          </tr>
+                        </thead>
+                        <tbody v-if="!loading1">
+                          <tr
+                            v-for="(group, index) in subject_list"
+                            :key="index"
+                          >
+                            <td>{{ index + 1 }}</td>
 
-                          <td>
-                            {{ group.subject }}
-                          </td>
-                          <td>
-                            <nuxt-link
-                              :to="group.cv_link"
-                              style="text-decoration: none; color: #000"
-                              >{{ group.cv_link }}</nuxt-link
-                            >
-                          </td>
-                          <td>
-                            {{ group.status == 0 ? "Chờ duyệt" : "Đã duyệt" }}
-                          </td>
-                          <td>
-                            <button @click="handleAccept(group.id)">
-                              <v-icon class="pr-3">mdi-check</v-icon>Duyệt
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <v-pagination
-                      v-model="page"
-                      :length="totalPages"
-                      total-visible="7"
-                      color="purple"
-                    ></v-pagination>
-                  </div>
-                </v-card>
-              </v-window-item>
-              <v-window-item value="option-2">
+                            <td>
+                              {{ group.subject }}
+                            </td>
+                            <td>
+                              <nuxt-link
+                                :to="group.cv_link"
+                                style="text-decoration: none; color: #000"
+                                >{{ group.cv_link }}</nuxt-link
+                              >
+                            </td>
+                            <td>
+                              {{ group.status == 0 ? "Chờ duyệt" : "Đã duyệt" }}
+                            </td>
+                            <td>
+                              <div
+                                style="display: flex; justify-content: center"
+                              >
+                                <v-btn
+                                  @click="handlePut(group.subject_id)"
+                                  color="success"
+                                  v-if="group.status == 0"
+                                >
+                                  <v-icon>mdi-check</v-icon>
+                                </v-btn>
+                                <v-btn
+                                  color="success"
+                                  v-if="group.status == 1"
+                                  disabled
+                                >
+                                  <v-icon>mdi-check</v-icon>
+                                </v-btn>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <v-progress-circular
+                        indeterminate
+                        color="primary"
+                        style="
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          margin: auto;
+                        "
+                        v-if="loading1"
+                      ></v-progress-circular>
+                      <v-pagination
+                        v-model="page"
+                        :length="totalPages"
+                        total-visible="7"
+                        color="purple"
+                      ></v-pagination>
+                    </div>
+                  </v-card>
+                </v-window-item>
+                <v-window-item value="option-2">
                   <v-card flat>
                     <v-toolbar>
                       <v-card-title class="text-center justify-center">
@@ -332,62 +297,67 @@
                     </v-card-text>
                   </v-card>
                 </v-window-item>
-              <v-window-item value="option-3">
-                <v-card flat>
-                  <div class="mentor-review">
-                    <h3>Đánh giá từ mentor :</h3>
-                    <v-col cols="12" class="cus-table">
-                      <div class="header_fixed">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>No.</th>
-                              <th>Tên người đánh giá</th>
-                              <th>Group</th>
-                              <th>điểm</th>
-                              <th>Nhận xét</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="(rating, index) in ratings" :key="index">
-                              <td>{{ index + 1 }}</td>
-                              <td>{{ rating.account_name }}</td>
-                              <td>
-                                {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
-                              </td>
-                              <td>{{ rating.rating }} / 10</td>
-                              <td>{{ rating.comment }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <v-pagination
-                          v-model="page"
-                          :length="totalPages"
-                          total-visible="7"
-                          color="purple"
-                        ></v-pagination>
-                      </div>
-                    </v-col>
-                  </div>
-                </v-card>
-              </v-window-item>
-            </v-window>
-          </div>
-        </v-card>
+                <v-window-item value="option-3">
+                  <v-card flat>
+                    <div class="mentor-review">
+                      <h3>Đánh giá từ mentor :</h3>
+                      <v-col cols="12" class="cus-table">
+                        <div class="header_fixed">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>Tên người đánh giá</th>
+                                <th>Group</th>
+                                <th>điểm</th>
+                                <th>Nhận xét</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(rating, index) in ratings"
+                                :key="index"
+                              >
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ rating.account_from }}</td>
+                                <td>
+                                  {{ rating.group_id == 1 ? "CNTT" : "KHMT" }}
+                                </td>
+                                <td>{{ rating.rating }} / 10</td>
+                                <td>{{ rating.comment }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <v-pagination
+                            v-model="page"
+                            :length="totalPages"
+                            total-visible="7"
+                            color="purple"
+                          ></v-pagination>
+                        </div>
+                      </v-col>
+                    </div>
+                  </v-card>
+                </v-window-item>
+              </v-window>
+            </div>
+          </v-card>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
 <script setup>
 const tab = ref("option-1");
-const dialog1 = ref(false);
-const tab1 = ref("option-1");
 const route = useRoute();
 const faculties = ref({});
 const loading = ref(true);
+const loading1 = ref(false);
 const ratings = ref([]);
 const subject_list = ref([]);
+const subject = ref({
+  subject_id: 0,
+});
 const groupsMentor = ref([]);
 const myMentors = ref({
   id: "",
@@ -395,8 +365,14 @@ const myMentors = ref({
   full_name: "",
   faculty: "",
   number_of_subjects: "",
-  rating_score: "",
+  rating_score: null,
 });
+onMounted(() => {
+  onTop();
+});
+const onTop = () => {
+  window.scrollTo(0, 0);
+};
 const messages = {
   0: "Đang chờ duyệt",
   1: "tìm kiếm bạn học",
@@ -433,6 +409,10 @@ getMentorsResponse(() => {
   subject_list.value = dataGetMentors.value.data.data.subject_list;
   groupsMentor.value = dataGetMentors.value.data.data.groups;
   loading.value = false;
+  loading1.value = false;
+  if (myMentors.value.rating_score == null) {
+    myMentors.value.rating_score = "Mentor chưa được đánh giá";
+  }
 });
 
 const {
@@ -449,43 +429,6 @@ getFacultyResponse(() => {
   faculties.value = dataGetFaculty.value.data.data;
 });
 
-// Tạo url lấy groups user đang tham gia học
-// const { url: urlgroupMentor } = useUrl({
-//   path: "mentors/groups",
-//   queryParams: {
-//     is_mentor: 1,
-//     is_active: 1,
-//   },
-// });
-
-// Lấy groups của user đang đăng nhập
-// const {
-//   data: dataGetgroupsMentor,
-//   get: getgroupsMentor,
-//   onFetchResponse: getgroupsMentorResponse,
-//   onFetchError: getgroupsMentorError,
-// } = useFetchApi({
-//   requireAuth: true,
-//   disableHandleErrorUnauthorized: true,
-// })(urlgroupMentor, { immediate: false });
-
-// getgroupsMentor().json().execute();
-// getgroupsMentorResponse(() => {
-//   groupsMentor.value = dataGetgroupsMentor.value.data.data;
-// });
-// const {
-//   data: dataMentorInfor,
-//   get: getMentorInfor,
-//   onFetchResponse: getMentorInforResponse,
-//   onFetchError: getMentorInforError,
-// } = useFetchApi({
-//   requireAuth: true,
-//   disableHandleErrorUnauthorized: true,
-// })("/mentors/mentor-infor", { immediate: false });
-// getMentorInfor().json().execute();
-// getMentorInforResponse(() => {
-//   infor.value = dataMentorInfor.value.data;
-// });
 const {
   data: dataPut,
   onFetchResponse: resPut,
@@ -495,20 +438,20 @@ const {
 } = useFetchApi({
   requireAuth: true,
   disableHandleErrorUnauthorized: true,
-})(`/groups/${route.params.id}/acceptMentor`, { immediate: false });
+})(`/mentors/${route.params.id}`, {});
 // Trả về khi put thông tin cá nhân
 resPut(() => {
   console.log("put thanh cong");
+  // loading1.value = false;
 });
 errPut(() => {
-  // if (codePut.value === getConfig("constants.statusCodes.validation")) {
-  //   validationErrorMessages.value = dataPut.value.meta.error_message;
-  // }
-  // return false;
   console.log("Loi put");
 });
-const handleAccept = (num) => {
-  put(num).json().execute();
+const handlePut = (id) => {
+  subject.value.subject_id = id;
+  loading1.value = true;
+  put(subject.value).json().execute();
+  getMentors().json().execute();
 };
 </script>
 

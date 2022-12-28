@@ -49,14 +49,18 @@
             variant="underlined"
             background-color="light-blue"
             prepend-icon="mdi-account"
-            v-model="notify.title"
+            v-model="newNotify.title"
+            :rules="titleRules"
+            :counter="100"
           ></v-text-field>
           <v-textarea
             color="black"
             label="Thông báo"
             variant="underlined"
             prepend-icon="mdi-comment"
-            v-model="notify.content"
+            v-model="newNotify.content"
+            :rules="contentRules"
+            :counter="500"
           ></v-textarea>
           <div class="d-flex flex-wrap gap-2 flex-row-reverse"></div>
         </div>
@@ -71,13 +75,7 @@
           >
             Đóng
           </v-btn>
-          <v-btn
-            text
-            @click="dialog = false"
-            type="submit"
-            variant="flat"
-            color="secondary"
-          >
+          <v-btn text type="submit" variant="flat" color="secondary">
             Lưu
           </v-btn>
         </v-card-actions>
@@ -91,7 +89,20 @@ const props = defineProps({
     type: Object,
   },
 });
-
+const newNotify = ref(props.notify);
+// console.log(newNotify);
+// onMounted(() => {
+//   console.log(props.notify);
+// });
+const { $toast } = useNuxtApp();
+const titleRules = ref([
+  (v) => !!v || "Tiêu đề thông báo là bắt buộc",
+  (v) => v.length <= 100 || "Tiêu đề thông báo chỉ có tối đa 100 ký tự",
+]);
+const contentRules = ref([
+  (v) => !!v || "Nội dung thông báo là bắt buộc",
+  (v) => v.length <= 500 || "Nội dung thông báo chỉ có tối đa 500 ký tự",
+]);
 const dialog = ref(false);
 const {
   data: dataPost,
@@ -103,28 +114,29 @@ const {
   requireAuth: true,
   disableHandleErrorUnauthorized: true,
 })(`/notifications/${props.notify.id}`, { immediate: false });
-// })(`/notifications/`, { immediate: false });
 resPost(() => {
-  // myUsers.value = dataPut.value.data.data;
+  $toast("Cập nhật thông báo thành công", "success", 1500);
 });
 errPost(() => {
-  //   if (codePost.value === getConfig("constants.statusCodes.validation")) {
-  //     validationErrorMessages.value = dataPost.value.meta.error_message;
-  //   }
-  //   return false;
-
-  console.log("loi");
+  $toast("Cập nhật thông báo thất bại", "error", 1500);
 });
 
 const submit = () => {
-  console.log(props.notify.content);
-
-  put(props.notify).json().execute();
+  // console.log(props.notify.title);
+  if (
+    props.notify.title == "" ||
+    props.notify.content == "" ||
+    props.notify.title.title.length >= 100 ||
+    props.notify.title.content.length >= 500
+  ) {
+    return;
+  } else {
+    handleClose();
+    put(props.notify).json().execute();
+  }
 };
 const handleClose = () => {
   dialog.value = false;
-  //   notify.value.title = "";
-  //   notify.value.content = "";
 };
 </script>
 <style scoped>

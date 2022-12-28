@@ -51,7 +51,9 @@
                       <td>{{ group.topic }}</td>
                       <td>
                         {{
-                          group.seft_study ? "Nhóm có mentor" : "Nhóm tự học"
+                          group.self_study == 0
+                            ? "Nhóm có mentor"
+                            : "Nhóm tự học"
                         }}
                       </td>
                       <td>
@@ -113,11 +115,11 @@
             ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                  v-model="page1"
-                  :length="pagination1.total_page"
-                  color="purple"
-                  @click="handleChangePage1"
-                ></v-pagination>
+                v-model="page1"
+                :length="pagination1.total_page"
+                color="purple"
+                @click="handleChangePage1"
+              ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -149,11 +151,11 @@
             ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                  v-model="page2"
-                  :length="pagination2.total_page"
-                  color="purple"
-                  @click="handleChangePage2"
-                ></v-pagination>
+                v-model="page2"
+                :length="pagination2.total_page"
+                color="purple"
+                @click="handleChangePage2"
+              ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -185,11 +187,11 @@
             ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                  v-model="page3"
-                  :length="pagination3.total_page"
-                  color="purple"
-                  @click="handleChangePage3"
-                ></v-pagination>
+                v-model="page3"
+                :length="pagination3.total_page"
+                color="purple"
+                @click="handleChangePage3"
+              ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -221,11 +223,11 @@
             ></v-progress-circular>
             <div class="text-center">
               <v-pagination
-                  v-model="page4"
-                  :length="pagination4.total_page"
-                  color="purple"
-                  @click="handleChangePage4"
-                ></v-pagination>
+                v-model="page4"
+                :length="pagination4.total_page"
+                color="purple"
+                @click="handleChangePage4"
+              ></v-pagination>
             </div>
           </v-card>
         </v-window-item>
@@ -348,7 +350,7 @@ getGroupsCreate().json().execute();
 getGroupsCreateResponse(() => {
   groupsCreate.value = dataGetGroupsCreate.value.data.data;
   pagination.value = dataGetGroupsCreate.value.data.pagination;
-  console.log(groupsCreate.value);
+  // console.log(groupsCreate.value);
   loading.value = false;
 });
 
@@ -422,6 +424,9 @@ getGroupsResponse4(() => {
 </script>
 
 <style scoped>
+.v-card {
+  padding: "0 20px";
+}
 .v-btn {
   margin: 5px;
 }
@@ -499,16 +504,13 @@ thead th:nth-child(2) {
 }
 
 thead th:nth-child(3) {
-  width: 15%;
+  width: 35%;
 }
 
 thead th:nth-child(4) {
-  width: 35%;
-}
-thead th:nth-child(5) {
   width: 15%;
 }
-thead th:nth-child(6) {
+thead th:nth-child(5) {
   width: 15%;
 }
 .v-tabs .v-btn {
