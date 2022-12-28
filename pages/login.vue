@@ -78,15 +78,12 @@ const { data, statusCode, onFetchResponse, onFetchError, post } = useFetchApi({
 
 onFetchResponse(() => {
   setToken(data.value.data.token.access_token);
-  // setToken(data.value.token);
-  // console.log("Ok");
   $toast("Đăng nhập thành công", "success", 1500);
   return navigateTo("/");
 });
 onFetchError(() => {
   $toast("Đăng nhập thất bại", "error", 1500);
 });
-// submit login
 const submit = () => {
   unauthorizedErrorMessage.value = "";
   validationErrorMessages.value = {};

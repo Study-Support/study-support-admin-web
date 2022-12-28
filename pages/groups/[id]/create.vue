@@ -112,6 +112,27 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
+                  <label>Ảnh đại diện tạo nhóm học:</label>
+                </div>
+                <div
+                  class="col-md-12"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <img
+                    :src="`${data.image_url}`"
+                    alt=""
+                    style="
+                      max-width: 100%;
+                      object-fit: contain;
+                      max-height: 240px;
+                    "
+                  />
+                </div>
+                <div class="col-md-12">
                   <label>Mục đích tạo nhóm học:</label>
                 </div>
                 <div class="col-md-12">
@@ -166,10 +187,7 @@
           </div>
         </div>
         <div class="control-btn">
-          <v-btn
-            variant="flat"
-            color="error"
-            @click="deleteGroup(data.subject, data.faculty)"
+          <v-btn variant="flat" color="error" @click="deleteGroup()"
             >Xoá
           </v-btn>
           <v-btn
@@ -290,14 +308,25 @@ const submit = (subject, faculty) => {
   newPost.value.content = "";
 };
 
-const deleteGroup = (subject, faculty) => {
-  $toast(`Nhóm ${route.params.id} đã được tạo`, "success", 1500);
-  newPost.value.title = "Thông báo tuyển thành viên";
-  newPost.value.content = `Nhóm học số ${route.params.id} bộ môn ${subject} thuộc khoa ${faculty} được tạo, các bạn có thể vào đăng ký`;
+const {
+  data: dataDeleteGroups,
+  onFetchResponse: resDeleteGroups,
+  onFetchError: errDeleteGroups,
+  delete: delGroups,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(`/groups/${route.params.id}`, { immediate: false });
+resDeleteGroups(() => {
+  $toast(`Nhóm ${route.params.id} đã được xoá`, "success", 1500);
+});
+errDeleteGroups(() => {
+  $toast(`Hệ thống gặp trục trặc, bạn vui lòng thử lại sau`, "error", 1500);
+});
+
+const deleteGroup = () => {
+  // delGroups().json().execute();
   navigateTo("/groups");
-  post(newPost.value).json().execute();
-  newPost.value.title = "";
-  newPost.value.content = "";
 };
 </script>
 

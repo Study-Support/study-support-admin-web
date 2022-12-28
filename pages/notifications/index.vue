@@ -7,7 +7,7 @@
             <lable>Tìm kiếm thông báo: </lable>
             <div class="input-group search" id="search">
               <input
-                v-model="filter.a.search"
+                v-model="filter.a.title"
                 class="form-control border input-cus"
                 type="search"
                 placeholder="Search"
@@ -196,15 +196,14 @@ const pagination = ref({
 });
 const filter = ref({
   a: {
-    search: route.query.search === undefined ? "" : route.query.search,
+    title: route.query.title === undefined ? "" : route.query.title,
+    page: page,
   },
 });
 
 const { url: url1 } = useUrl({
   path: "/notifications",
-  queryParams: {
-    page: page,
-  },
+  queryParams: filter.value.a,
 });
 
 const {

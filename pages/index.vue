@@ -1,66 +1,17 @@
 <template>
   <div class="wrap">
-    <!-- <div class="container1">
-      <div class="content">
-        <div class="cards">
-          <v-row>
-            <v-col cols="12" lg="3" sm="12" md="6">
-              <div class="card">
-                <div class="icon-case">
-                  <v-icon style="font-size: 70px; color: #009cff"
-                    >mdi-account-school-outline</v-icon
-                  >
-                </div>
-                <div class="box">
-                  <h2>3</h2>
-                  <h3>Sinh Viên</h3>
-                </div>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="3" sm="12" md="6">
-              <div class="card">
-                <div class="icon-case">
-                  <v-icon style="font-size: 70px; color: #009cff"
-                    >mdi-human-male-board-poll</v-icon
-                  >
-                </div>
-                <div class="box">
-                  <h2>53</h2>
-                  <h3>Mentor</h3>
-                </div>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="3" sm="12" md="6">
-              <div class="card">
-                <div class="icon-case">
-                  <v-icon style="font-size: 70px; color: #009cff"
-                    >mdi-account-group-outline</v-icon
-                  >
-                </div>
-                <div class="box">
-                  <h2>5</h2>
-                  <h3>Nhóm học</h3>
-                </div>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="3" sm="12" md="6">
-              <div class="card">
-                <div class="icon-case">
-                  <v-icon style="font-size: 70px; color: #009cff"
-                    >mdi-bell-ring-outline</v-icon
-                  >
-                </div>
-                <div class="box">
-                  <h2>13</h2>
-                  <h3>Thông báo</h3>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </div>
-      </div>
-    </div> -->
-    <v-row>
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+      "
+      v-if="loading"
+    ></v-progress-circular>
+    <v-row v-if="!loading">
       <v-col lg="8" md="12">
         <DxPieChart
           id="pie"
@@ -145,131 +96,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col lg="4">
-        <div
-          class="BoxBasic"
-          style="
-            height: 100%;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-          "
-        >
-          <h4 style="color: #009cff; padding-top: 20px">Thống kê thông báo</h4>
-          <div class="icon-case" style="padding-top: 20px">
-            <h5>Tổng số thông báo</h5>
-            <div
-              class="box"
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-top: 20px;
-              "
-            >
-              <v-icon style="font-size: 70px; color: #009cff"
-                >mdi-bell-ring-outline</v-icon
-              >
-              <h1>30</h1>
-            </div>
-          </div>
-          <div class="icon-case" style="padding-top: 50px">
-            <h5>Số câu hỏi mentor</h5>
-            <div
-              class="box"
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-top: 20px;
-              "
-            >
-              <v-icon style="font-size: 70px; color: #009cff"
-                >mdi-account-question-outline</v-icon
-              >
-              <h1>3</h1>
-            </div>
-          </div>
-        </div>
-      </v-col>
-      <v-col sm="4">
-        <DxPieChart
-          id="pie"
-          :data-source="areas"
-          palette="Bright"
-          title="Area of Countries"
-          @point-click="pointClickHandler($event)"
-          @legend-click="legendClickHandler($event)"
-          class="BoxBasic"
-        >
-          <DxSeries argument-field="country" value-field="area">
-            <DxLabel :visible="true">
-              <DxConnector :visible="true" :width="1" />
-            </DxLabel>
-          </DxSeries>
-          <DxExport :enabled="true" />
-          <DxLegend
-            vertical-alignment="bottom"
-            horizontal-alignment="center"
-            item-text-position="right"
-          />
-        </DxPieChart>
-      </v-col>
-      <v-col sm="4">
-        <DxPieChart
-          id="pie"
-          :data-source="areas1"
-          palette="Bright"
-          title="Area of Countries"
-          @point-click="pointClickHandler($event)"
-          @legend-click="legendClickHandler($event)"
-          class="BoxBasic"
-        >
-          <DxSeries argument-field="country" value-field="area">
-            <DxLabel :visible="true">
-              <DxConnector :visible="true" :width="1" />
-            </DxLabel>
-          </DxSeries>
-          <DxExport :enabled="true" />
-          <DxLegend
-            vertical-alignment="bottom"
-            horizontal-alignment="center"
-            item-text-position="right"
-          />
-        </DxPieChart>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col lg="8">
-        <DxChart
-          id="chart"
-          :data-source="sharingStatisticsInfo"
-          palette="Violet"
-          title="Architecture Share Over Time (Count)"
-          class="BoxBasic"
-        >
-          <DxCommonSeriesSettings :type="type" argument-field="month" />
-          <DxCommonAxisSettings>
-            <DxGrid :visible="true" />
-          </DxCommonAxisSettings>
-          <DxSeries
-            v-for="architecture in architectureSources"
-            :key="architecture.value"
-            :value-field="architecture.value"
-            :name="architecture.name"
-          />
-          <DxMargin :bottom="20" />
-          <DxArgumentAxis :allow-decimals="false" :axis-division-factor="60">
-            <DxLabel>
-              <DxFormat type="decimal" />
-            </DxLabel>
-          </DxArgumentAxis>
-          <DxLegend vertical-alignment="top" horizontal-alignment="right" />
-          <DxExport :enabled="true" />
-          <DxTooltip :enabled="true" />
-        </DxChart>
-      </v-col>
+    <v-row v-if="!loading">
       <v-col lg="4">
         <div
           class="BoxBasic"
@@ -295,7 +122,7 @@
               <v-icon style="font-size: 70px; color: #009cff"
                 >mdi-account-school-outline</v-icon
               >
-              <h1>500</h1>
+              <h1>{{ paginationUser.total_rows }}</h1>
             </div>
           </div>
           <div class="icon-case" style="padding-top: 50px">
@@ -312,10 +139,134 @@
               <v-icon style="font-size: 70px; color: #009cff">
                 mdi-human-male-board-poll</v-icon
               >
-              <h1>50</h1>
+              <h1>{{ paginationMentor.total_rows }}</h1>
             </div>
           </div>
         </div>
+      </v-col>
+      <v-col lg="8">
+        <DxChart
+          id="chart"
+          :data-source="sharingStatisticsInfo"
+          palette="Violet"
+          title="Bảng phát triển website"
+          class="BoxBasic"
+        >
+          <DxCommonSeriesSettings :type="type" argument-field="month" />
+          <DxCommonAxisSettings>
+            <DxGrid :visible="true" />
+          </DxCommonAxisSettings>
+          <DxSeries
+            v-for="architecture in architectureSources"
+            :key="architecture.value"
+            :value-field="architecture.value"
+            :name="architecture.name"
+          />
+          <DxMargin :bottom="20" />
+          <DxArgumentAxis :allow-decimals="false" :axis-division-factor="60">
+            <DxLabel>
+              <DxFormat type="decimal" />
+            </DxLabel>
+          </DxArgumentAxis>
+          <DxLegend vertical-alignment="top" horizontal-alignment="right" />
+          <DxExport :enabled="true" />
+          <DxTooltip :enabled="true" />
+        </DxChart>
+      </v-col>
+    </v-row>
+    <v-row v-if="!loading">
+      <v-col lg="4">
+        <div
+          class="BoxBasic"
+          style="
+            height: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+          "
+        >
+          <h4 style="color: #009cff; padding-top: 20px">Thống kê thông báo</h4>
+          <div class="icon-case" style="padding-top: 20px">
+            <h5>Tổng số thông báo</h5>
+            <div
+              class="box"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 20px;
+              "
+            >
+              <v-icon style="font-size: 70px; color: #009cff"
+                >mdi-bell-ring-outline</v-icon
+              >
+              <h1>{{ pagination.total_rows }}</h1>
+            </div>
+          </div>
+          <div class="icon-case" style="padding-top: 50px">
+            <h5>Số câu hỏi mentor</h5>
+            <div
+              class="box"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 20px;
+              "
+            >
+              <v-icon style="font-size: 70px; color: #009cff"
+                >mdi-account-question-outline</v-icon
+              >
+              <h1>{{ questions.length }}</h1>
+            </div>
+          </div>
+        </div>
+      </v-col>
+      <v-col sm="4">
+        <DxPieChart
+          id="pie"
+          :data-source="areas"
+          palette="Bright"
+          title="Trạng thái User"
+          @point-click="pointClickHandler($event)"
+          @legend-click="legendClickHandler($event)"
+          class="BoxBasic"
+        >
+          <DxSeries argument-field="country" value-field="area">
+            <DxLabel :visible="true">
+              <DxConnector :visible="true" :width="1" />
+            </DxLabel>
+          </DxSeries>
+          <DxExport :enabled="true" />
+          <DxLegend
+            vertical-alignment="bottom"
+            horizontal-alignment="center"
+            item-text-position="right"
+          />
+        </DxPieChart>
+      </v-col>
+      <v-col sm="4">
+        <DxPieChart
+          id="pie"
+          :data-source="areas1"
+          palette="Bright"
+          title="Trạng thái Mentor"
+          @point-click="pointClickHandler($event)"
+          @legend-click="legendClickHandler($event)"
+          class="BoxBasic"
+        >
+          <DxSeries argument-field="country" value-field="area">
+            <DxLabel :visible="true">
+              <DxConnector :visible="true" :width="1" />
+            </DxLabel>
+          </DxSeries>
+          <DxExport :enabled="true" />
+          <DxLegend
+            vertical-alignment="bottom"
+            horizontal-alignment="center"
+            item-text-position="right"
+          />
+        </DxPieChart>
       </v-col>
     </v-row>
   </div>
@@ -383,31 +334,24 @@ const sharingStatisticsInfo = ref([
   },
 ]);
 
-const items = ref([
-  { text: "Đang chờ duyệt", icon: "mdi-clock", data: "10" },
-  { text: "Tìm kiếm member", icon: "mdi-account-badge", data: "8" },
-  { text: "Tìm kiếm mentor", icon: "mdi-account-school", data: "5" },
-  { text: "Đang hoạt động", icon: "mdi-access-point", data: "7" },
-  { text: "Đã đóng", icon: "mdi-doorbell-video", data: "1" },
-]);
 const areas = ref([
   {
-    country: "Chờ duyệt",
+    country: "Đang hoạt động",
     area: 12,
   },
   {
-    country: "Tìm kiếm member",
-    area: 7,
+    country: "Khóa tài khoản",
+    area: 2,
   },
 ]);
 const areas1 = ref([
   {
-    country: "Tìm kiếm mentor",
-    area: 3,
+    country: "Đang hoạt động",
+    area: 30,
   },
   {
-    country: "Đang hoạt động",
-    area: 5,
+    country: "Khóa tài khoản",
+    area: 2,
   },
 ]);
 const populationByRegions = ref([
@@ -449,6 +393,248 @@ const legendClickHandler = (e) => {
 const toggleVisibility = (item) => {
   item.isVisible() ? item.hide() : item.show();
 };
+const loading = ref(true);
+
+const questions = ref([]);
+const { url: url1 } = useUrl({
+  path: "/mentor-questions",
+  queryParams: {},
+});
+const {
+  data: dataGetQuestions,
+  get: getQuestions,
+  onFetchResponse: getQuestionsResponse,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url1, { immediate: false });
+getQuestions().json().execute();
+getQuestionsResponse(() => {
+  questions.value = dataGetQuestions.value.data.data;
+});
+
+const pagination = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+
+const { url: url2 } = useUrl({
+  path: "/notifications",
+  // queryParams: filter.value.a,
+});
+
+const {
+  data: dataGetPosts,
+  get: getPosts,
+  onFetchResponse: getPostsResponse,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url2, { immediate: false });
+getPosts().json().execute();
+getPostsResponse(() => {
+  pagination.value = dataGetPosts.value.data.pagination;
+});
+
+const paginationUser = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const { url: urlUser } = useUrl({
+  path: "/users",
+});
+
+const {
+  data: dataGetFilterUsers,
+  get: getFilterUsers,
+  onFetchResponse: getFilterUsersResponse,
+  onFetchError: getFilterUsersError,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(urlUser, { immediate: false });
+
+getFilterUsers().json().execute();
+
+getFilterUsersResponse(() => {
+  paginationUser.value = dataGetFilterUsers.value.data.pagination;
+});
+
+const paginationMentor = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const { url: urlMentor } = useUrl({
+  path: "/mentors",
+  queryParams: {
+    // queryParams: filter.value.a,
+  },
+});
+const {
+  data: dataGetFilterMentors,
+  get: getFilterMentors,
+  onFetchResponse: getFilterMentorsResponse,
+  onFetchError: getFilterMentorsError,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(urlMentor, { immediate: false });
+getFilterMentors().json().execute();
+
+getFilterMentorsResponse(() => {
+  paginationMentor.value = dataGetFilterMentors.value.data.pagination;
+  loading.value = false;
+});
+const items = ref([
+  {
+    text: "Đang chờ duyệt",
+    icon: "mdi-clock",
+    data: "10",
+  },
+  { text: "Tìm kiếm member", icon: "mdi-account-badge", data: "8" },
+  { text: "Tìm kiếm mentor", icon: "mdi-account-school", data: "5" },
+  { text: "Đang hoạt động", icon: "mdi-access-point", data: "7" },
+  { text: "Đã đóng", icon: "mdi-doorbell-video", data: "1" },
+]);
+const pagination0 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination1 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination2 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination3 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+const pagination4 = ref({
+  current_page: 0,
+  total_page: 0,
+  total_rows: 0,
+});
+
+const { url: url00 } = useUrl({
+  path: "/groups",
+  queryParams: {
+    status: 0,
+    // page: 1,
+  },
+});
+const { url: url11 } = useUrl({
+  path: "/groups",
+  queryParams: {
+    status: 1,
+    // page: page1,
+  },
+});
+const { url: url22 } = useUrl({
+  path: "/groups",
+  queryParams: {
+    status: 2,
+    // page: page2,
+  },
+});
+const { url: url33 } = useUrl({
+  path: "/groups",
+  queryParams: {
+    status: 3,
+    // page: page3,
+  },
+});
+const { url: url44 } = useUrl({
+  path: "/groups",
+  queryParams: {
+    status: 4,
+    // page: page4,
+  },
+});
+const {
+  data: dataGetGroupsCreate,
+  get: getGroupsCreate,
+  onFetchResponse: getGroupsCreateResponse,
+  onFetchError: errput,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url00, { immediate: false });
+getGroupsCreate().json().execute();
+getGroupsCreateResponse(() => {
+  pagination0.value = dataGetGroupsCreate.value.data.pagination;
+  items[0].value.data = pagination0.value.total_rows;
+  console.log(items[0].value.data);
+});
+
+const {
+  data: dataGetGroups1,
+  get: getGroups1,
+  onFetchResponse: getGroupsResponse1,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url11, { immediate: false });
+getGroups1().json().execute();
+getGroupsResponse1(() => {
+  pagination1.value = dataGetGroups1.value.data.pagination;
+  items[1].value.data = pagination1.value.total_rows;
+  console.log(items[1].value.data);
+});
+
+const {
+  data: dataGetGroups2,
+  get: getGroups2,
+  onFetchResponse: getGroupsResponse2,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url22, { immediate: false });
+getGroups2().json().execute();
+getGroupsResponse2(() => {
+  pagination2.value = dataGetGroups2.value.data.pagination;
+  items[2].value.data = pagination2.value.total_rows;
+  console.log(items[2].value.data);
+});
+
+const {
+  data: dataGetGroups3,
+  get: getGroups3,
+  onFetchResponse: getGroupsResponse3,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url33, { immediate: false });
+getGroups3().json().execute();
+getGroupsResponse3(() => {
+  pagination3.value = dataGetGroups3.value.data.pagination;
+  items[3].value.data = pagination3.value.total_rows;
+  console.log(items[3].value.data);
+});
+
+const {
+  data: dataGetGroups4,
+  get: getGroups4,
+  onFetchResponse: getGroupsResponse4,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(url44, { immediate: false });
+getGroups4().json().execute();
+getGroupsResponse4(() => {
+  pagination4.value = dataGetGroups4.value.data.pagination;
+  items[4].value.data = pagination4.value.total_rows;
+  console.log(items[4].value.data);
+});
 </script>
 
 <style scoped>

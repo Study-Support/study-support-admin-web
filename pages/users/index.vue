@@ -121,7 +121,6 @@ const pagination = ref({
   total_rows: 0,
 });
 const router = useRouter();
-const { getConfig } = useConfig();
 const faculties = ref({});
 const loading = ref(true);
 const myUsers = ref([]);
