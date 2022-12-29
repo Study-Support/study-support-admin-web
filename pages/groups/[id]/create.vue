@@ -325,7 +325,7 @@ errDeleteGroups(() => {
 });
 
 const deleteGroup = () => {
-  // delGroups().json().execute();
+  delGroups().json().execute();
   navigateTo("/groups");
 };
 </script>

@@ -61,6 +61,18 @@
         >
           Hiện tại nhóm chưa có mentor
         </h3>
+
+        <v-col cols="12" sm="4">
+          <div class="control-btn">
+            <v-btn
+              variant="flat"
+              color="error"
+              @click="closeGroup()"
+              style="width: 140px; margin-left: 20px"
+              >Đóng nhóm
+            </v-btn>
+          </div>
+        </v-col>
         <h3
           class="h3-cus"
           style="padding-left: 10px; padding-top: 20px"
@@ -68,7 +80,6 @@
         >
           Thông tin Mentor đăng ký :
         </h3>
-
         <div class="header_fixed" v-if="group.mentorWaiting.length > 0">
           <table>
             <thead>
@@ -210,6 +221,27 @@ const submitMentor = (id) => {
   $toast("Duyệt Mentor thành công", "success", 1500);
   navigateTo("/groups");
   $toast("Nhóm bắt đầu hoạt động", "success", 1500);
+};
+
+const {
+  data: dataCloseGroups,
+  onFetchResponse: resCloseGroups,
+  onFetchError: errCloseGroups,
+  put: closeGroups,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(`/close-group/${route.params.id}`, { immediate: false });
+resCloseGroups(() => {
+  $toast(`Nhóm ${route.params.id} đã đóng`, "success", 1500);
+});
+errCloseGroups(() => {
+  $toast(`Hệ thống gặp trục trặc, bạn vui lòng thử lại sau`, "error", 1500);
+});
+
+const closeGroup = () => {
+  closeGroups().json().execute();
+  navigateTo("/groups");
 };
 </script>
 <style scoped>

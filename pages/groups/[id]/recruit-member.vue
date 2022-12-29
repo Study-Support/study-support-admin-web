@@ -64,6 +64,13 @@
           >
             {{ group.self_study == 0 ? "Tìm kiếm mentor" : "Tạo nhóm học" }}
           </v-btn>
+          <v-btn
+            variant="flat"
+            color="error"
+            @click="closeGroup()"
+            style="width: 140px; margin-left: 20px"
+            >Đóng nhóm
+          </v-btn>
         </div>
       </v-col>
     </v-row>
@@ -214,6 +221,27 @@ const submit = (quantity, subject, faculty) => {
     newPost.value.content = "";
     navigateTo("/groups");
   }
+};
+
+const {
+  data: dataCloseGroups,
+  onFetchResponse: resCloseGroups,
+  onFetchError: errCloseGroups,
+  put: closeGroups,
+} = useFetchApi({
+  requireAuth: true,
+  disableHandleErrorUnauthorized: true,
+})(`/close-group/${route.params.id}`, { immediate: false });
+resCloseGroups(() => {
+  $toast(`Nhóm ${route.params.id} đã đóng`, "success", 1500);
+});
+errCloseGroups(() => {
+  $toast(`Hệ thống gặp trục trặc, bạn vui lòng thử lại sau`, "error", 1500);
+});
+
+const closeGroup = () => {
+  closeGroups().json().execute();
+  navigateTo("/groups");
 };
 </script>
 <style scoped>
